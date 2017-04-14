@@ -13,6 +13,9 @@ export default class MainScreen extends Component {
   onButtonPress() {
     Alert.alert('Hihi')
   }
+  onButtonSavePress() {
+    this.props.navigator.push(this.props.routes[1])
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -31,7 +34,7 @@ export default class MainScreen extends Component {
           </TouchableOpacity>
         </View>
         <View style={styles.areaSave}>
-          <TouchableOpacity style={styles.buttonSave} onPress={this.onButtonPress}>
+          <TouchableOpacity style={styles.buttonSave} onPress={() => this.onButtonSavePress()}>
             <Text style={styles.labelSave}>
               SAVE LOCATION
              </Text>
