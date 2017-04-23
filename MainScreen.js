@@ -4,7 +4,6 @@ import {
   View,
   Text,
   Image,
-  Button,
   Alert,
   TouchableOpacity
 } from 'react-native'
@@ -20,8 +19,7 @@ export default class MainScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.areaLogo}>
-          <Image
-            source={require('./src/imgs/map.png')} />
+          <Image source={require('./src/imgs/map.png')} />
         </View>
         <View style={styles.areaLogin}>
           <TouchableOpacity style={styles.blockLogin} onPress={this.onButtonPress}>
@@ -102,17 +100,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  areaPlace: {
-    flex: 0.15,
-    alignItems: 'center',
-    // justifyContent: 'center'
-  },
   labelSave: {
     color: '#F1F5F6',
     textAlign: 'center',
     fontSize: 20,
     fontFamily: "Helvetica",
     fontWeight: 'bold'
+  },
+  areaPlace: {
+    flex: 0.15,
+    alignItems: 'center',
+    // justifyContent: 'center'
   },
   buttonPlace: {
     height: 60,
