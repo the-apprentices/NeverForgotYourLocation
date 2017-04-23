@@ -45,7 +45,6 @@ export default class SaveLocation extends Component {
     console.warn(JSON.stringify(data))
   }
   render() {
-    console.warn(JSON.stringify(this.state.coordinate))
     return (
       <View style={styles.container}>
         <MapView style={styles.mapView}
