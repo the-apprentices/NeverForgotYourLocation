@@ -1,69 +1,69 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react'
 import {
+  StyleSheet,
   AppRegistry,
-  Navigator,
-  Text
+  Navigator
 } from 'react-native'
 
+import { LeftButton, RightButton, Title } from './NavigationBar'
 import MainScreen from './MainScreen'
+import SaveLocation from './SaveLocation'
 
 const routes = [
-  {index: 0 },
-  {index: 1 }
+  { index: 0 },
+  { index: 1 }
 ]
 
 export default class NeverForgotYourLocation extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      showNavBar: false
-    }
   }
   renderScene(route, navigator) {
-    if (route.index === 0) return <MainScreen navigator={navigator} routes={routes} />
-    if (route.index === 1) return <Text>Hehe</Text>
+    switch (route.index) {
+      case 0:
+        return <MainScreen
+          navigator={navigator}
+          routes={routes}
+        />
+        break
+      case 1:
+        return <SaveLocation
+          navigator={navigator}
+          routes={routes} />
+        break
+      case 2:
+        break
+    }
   }
   render() {
-    if (this.state.showNavBar)
-      return (
-        <Navigator
-          initialRoute={routes[0]}
-          initialRouteStack={routes}
-          renderScene={this.renderScene}
-          configureScene={(route, routeStack) => Navigator.SceneConfigs.HorizontalSwipeJump}
-          navigationBar={
-            <Navigator.NavigationBar
-              routeMapper={{
-                LeftButton: (route, navigator, index, navState) => {
-                  return <Text>Cancel</Text>
-                },
-                RightButton: (route, navigator, index, navState) => {
-                  return <Text>Done</Text>
-                },
-                Title: (route, navigator, index, navState) => {
-                  return <Text>Awesome Nav Bar</Text>
-                },
-              }}
-            />
-          }
-        />
-      )
-    else
-      return (
-        <Navigator
-          initialRoute={routes[0]}
-          initialRouteStack={routes}
-          renderScene={this.renderScene}
-          configureScene={(route, routeStack) => Navigator.SceneConfigs.HorizontalSwipeJump}
-        />
-      )
+    return (
+      <Navigator
+        initialRoute={routes[0]}
+        initialRouteStack={routes}
+        renderScene={this.renderScene}
+        configureScene={(route, routeStack) =>
+          Navigator.SceneConfigs.HorizontalSwipeJump}
+        navigationBar={
+          <Navigator.NavigationBar style={styles.navigationBar}
+            routeMapper={{
+              LeftButton,
+              RightButton,
+              Title
+            }}
+          />
+        }
+      />
+    )
   }
 }
+
+const styles = StyleSheet.create({
+  navigationBar: {
+    height: 60,
+    // backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+  },
+})
+
 
 AppRegistry.registerComponent('NeverForgotYourLocation', () => NeverForgotYourLocation)
