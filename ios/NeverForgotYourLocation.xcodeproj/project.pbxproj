@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -36,6 +35,18 @@
 		2DCD954D1E0B4F2C00145EB5 /* NeverForgotYourLocationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* NeverForgotYourLocationTests.m */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		D1775D88E92244D6A10DCABD /* ProximaNovaSoft-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 255987C5E1A34130BA1FA3DF /* ProximaNovaSoft-Bold.otf */; };
+		C9DEC81E160449F28926E65E /* ProximaNovaSoft-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 39EFF4CD6A904670AC444318 /* ProximaNovaSoft-Medium.otf */; };
+		1A92770D2A75490E935474A0 /* ProximaNovaSoft-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = B0DB2EABB6FC4633B9217301 /* ProximaNovaSoft-Regular.otf */; };
+		DF374F5F33114C21A45F59D3 /* ProximaNovaSoft-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1028855E3F39449483E32E3C /* ProximaNovaSoft-Semibold.otf */; };
+		3013F79EFAAF410A9C93EE70 /* Geometry Soft Pro-Bold N.otf in Resources */ = {isa = PBXBuildFile; fileRef = 66F9B557DCC849D5A974A431 /* Geometry Soft Pro-Bold N.otf */; };
+		8E17DE4BBE014EACB181F733 /* FaktPro-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51C6525F5B4E4556AAA2AE6E /* FaktPro-SemiBold.ttf */; };
+		FF6589622AE94B97A8801E3E /* Wicked Mouse Demo.otf in Resources */ = {isa = PBXBuildFile; fileRef = BF3985F3E4FB4052AA0172D2 /* Wicked Mouse Demo.otf */; };
+		87D7CE3255334625B82B75BD /* moonhouse.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ECB8825B28C34ABEACC81CED /* moonhouse.ttf */; };
+		4CB54A3895C34F1F9047D9C3 /* TypoGraphica.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2F59F019DFFC42D1B907CCC2 /* TypoGraphica.otf */; };
+		149A17EF31ED4DC1AE2F93CB /* PRIMETIME-PERSONAL USE ONLY.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 20A9359983BF40BE80A5766F /* PRIMETIME-PERSONAL USE ONLY.ttf */; };
+		8E78EC40FB6746E0A1F157E8 /* libRCTMapboxGL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 12CC772E090A480881DE95EE /* libRCTMapboxGL.a */; };
+		74E4F153E76543C9BEF53313 /* libRNSpinkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3915EB54EA7141FFACD70FDB /* libRNSpinkit.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -255,6 +266,20 @@
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		255987C5E1A34130BA1FA3DF /* ProximaNovaSoft-Bold.otf */ = {isa = PBXFileReference; name = "ProximaNovaSoft-Bold.otf"; path = "../src/assets/fonts/ProximaNovaSoft-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		39EFF4CD6A904670AC444318 /* ProximaNovaSoft-Medium.otf */ = {isa = PBXFileReference; name = "ProximaNovaSoft-Medium.otf"; path = "../src/assets/fonts/ProximaNovaSoft-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B0DB2EABB6FC4633B9217301 /* ProximaNovaSoft-Regular.otf */ = {isa = PBXFileReference; name = "ProximaNovaSoft-Regular.otf"; path = "../src/assets/fonts/ProximaNovaSoft-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		1028855E3F39449483E32E3C /* ProximaNovaSoft-Semibold.otf */ = {isa = PBXFileReference; name = "ProximaNovaSoft-Semibold.otf"; path = "../src/assets/fonts/ProximaNovaSoft-Semibold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		66F9B557DCC849D5A974A431 /* Geometry Soft Pro-Bold N.otf */ = {isa = PBXFileReference; name = "Geometry Soft Pro-Bold N.otf"; path = "../src/assets/fonts/Geometry Soft Pro-Bold N.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		51C6525F5B4E4556AAA2AE6E /* FaktPro-SemiBold.ttf */ = {isa = PBXFileReference; name = "FaktPro-SemiBold.ttf"; path = "../src/assets/fonts/FaktPro-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		BF3985F3E4FB4052AA0172D2 /* Wicked Mouse Demo.otf */ = {isa = PBXFileReference; name = "Wicked Mouse Demo.otf"; path = "../src/assets/fonts/Wicked Mouse Demo.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		ECB8825B28C34ABEACC81CED /* moonhouse.ttf */ = {isa = PBXFileReference; name = "moonhouse.ttf"; path = "../src/assets/fonts/moonhouse.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		2F59F019DFFC42D1B907CCC2 /* TypoGraphica.otf */ = {isa = PBXFileReference; name = "TypoGraphica.otf"; path = "../src/assets/fonts/TypoGraphica.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		20A9359983BF40BE80A5766F /* PRIMETIME-PERSONAL USE ONLY.ttf */ = {isa = PBXFileReference; name = "PRIMETIME-PERSONAL USE ONLY.ttf"; path = "../src/assets/fonts/PRIMETIME-PERSONAL USE ONLY.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		324042B577E2459A854552F3 /* RCTMapboxGL.xcodeproj */ = {isa = PBXFileReference; name = "RCTMapboxGL.xcodeproj"; path = "../node_modules/react-native-mapbox-gl/ios/RCTMapboxGL.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		12CC772E090A480881DE95EE /* libRCTMapboxGL.a */ = {isa = PBXFileReference; name = "libRCTMapboxGL.a"; path = "libRCTMapboxGL.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		BBE192DE4A6741F6B361E520 /* RNSpinkit.xcodeproj */ = {isa = PBXFileReference; name = "RNSpinkit.xcodeproj"; path = "../node_modules/react-native-spinkit/ios/RNSpinkit.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		3915EB54EA7141FFACD70FDB /* libRNSpinkit.a */ = {isa = PBXFileReference; name = "libRNSpinkit.a"; path = "libRNSpinkit.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -281,6 +306,8 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
+				8E78EC40FB6746E0A1F157E8 /* libRCTMapboxGL.a in Frameworks */,
+				74E4F153E76543C9BEF53313 /* libRNSpinkit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,6 +474,8 @@
 				832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */,
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
+				324042B577E2459A854552F3 /* RCTMapboxGL.xcodeproj */,
+				BBE192DE4A6741F6B361E520 /* RNSpinkit.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -467,6 +496,7 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* NeverForgotYourLocationTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
+				0DDEB2559AF147C984DE8C57 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -481,6 +511,24 @@
 				2D02E4901E0B4A5D006451C7 /* NeverForgotYourLocation-tvOSTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		0DDEB2559AF147C984DE8C57 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				255987C5E1A34130BA1FA3DF /* ProximaNovaSoft-Bold.otf */,
+				39EFF4CD6A904670AC444318 /* ProximaNovaSoft-Medium.otf */,
+				B0DB2EABB6FC4633B9217301 /* ProximaNovaSoft-Regular.otf */,
+				1028855E3F39449483E32E3C /* ProximaNovaSoft-Semibold.otf */,
+				66F9B557DCC849D5A974A431 /* Geometry Soft Pro-Bold N.otf */,
+				51C6525F5B4E4556AAA2AE6E /* FaktPro-SemiBold.ttf */,
+				BF3985F3E4FB4052AA0172D2 /* Wicked Mouse Demo.otf */,
+				ECB8825B28C34ABEACC81CED /* moonhouse.ttf */,
+				2F59F019DFFC42D1B907CCC2 /* TypoGraphica.otf */,
+				20A9359983BF40BE80A5766F /* PRIMETIME-PERSONAL USE ONLY.ttf */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -564,7 +612,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 610;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -841,6 +889,16 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				D1775D88E92244D6A10DCABD /* ProximaNovaSoft-Bold.otf in Resources */,
+				C9DEC81E160449F28926E65E /* ProximaNovaSoft-Medium.otf in Resources */,
+				1A92770D2A75490E935474A0 /* ProximaNovaSoft-Regular.otf in Resources */,
+				DF374F5F33114C21A45F59D3 /* ProximaNovaSoft-Semibold.otf in Resources */,
+				3013F79EFAAF410A9C93EE70 /* Geometry Soft Pro-Bold N.otf in Resources */,
+				8E17DE4BBE014EACB181F733 /* FaktPro-SemiBold.ttf in Resources */,
+				FF6589622AE94B97A8801E3E /* Wicked Mouse Demo.otf in Resources */,
+				87D7CE3255334625B82B75BD /* moonhouse.ttf in Resources */,
+				4CB54A3895C34F1F9047D9C3 /* TypoGraphica.otf in Resources */,
+				149A17EF31ED4DC1AE2F93CB /* PRIMETIME-PERSONAL USE ONLY.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -972,6 +1030,16 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NeverForgotYourLocation.app/NeverForgotYourLocation";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-mapbox-gl/ios/RCTMapboxGL",
+					"$(SRCROOT)/../node_modules/react-native-spinkit/ios/**",
+				);
 			};
 			name = Debug;
 		};
@@ -989,6 +1057,16 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NeverForgotYourLocation.app/NeverForgotYourLocation";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-mapbox-gl/ios/RCTMapboxGL",
+					"$(SRCROOT)/../node_modules/react-native-spinkit/ios/**",
+				);
 			};
 			name = Release;
 		};
@@ -1007,6 +1085,11 @@
 				);
 				PRODUCT_NAME = NeverForgotYourLocation;
 				VERSIONING_SYSTEM = "apple-generic";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-mapbox-gl/ios/RCTMapboxGL",
+					"$(SRCROOT)/../node_modules/react-native-spinkit/ios/**",
+				);
 			};
 			name = Debug;
 		};
@@ -1024,6 +1107,11 @@
 				);
 				PRODUCT_NAME = NeverForgotYourLocation;
 				VERSIONING_SYSTEM = "apple-generic";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-mapbox-gl/ios/RCTMapboxGL",
+					"$(SRCROOT)/../node_modules/react-native-spinkit/ios/**",
+				);
 			};
 			name = Release;
 		};
@@ -1050,6 +1138,16 @@
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-mapbox-gl/ios/RCTMapboxGL",
+					"$(SRCROOT)/../node_modules/react-native-spinkit/ios/**",
+				);
 			};
 			name = Debug;
 		};
@@ -1076,6 +1174,16 @@
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-mapbox-gl/ios/RCTMapboxGL",
+					"$(SRCROOT)/../node_modules/react-native-spinkit/ios/**",
+				);
 			};
 			name = Release;
 		};
@@ -1097,6 +1205,11 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NeverForgotYourLocation-tvOS.app/NeverForgotYourLocation-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 			};
 			name = Debug;
 		};
@@ -1118,6 +1231,11 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NeverForgotYourLocation-tvOS.app/NeverForgotYourLocation-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 			};
 			name = Release;
 		};
