@@ -23,47 +23,50 @@ export default class MainScreen extends Component {
   onButtonSavePress(navigate) {
     navigate('SaveLocation')
   }
+  onButtonVisitedPress(navigate) {
+    navigate('VisitedLocations')
+  }
   render() {
     const { navigate } = this.props.navigation
     return (
-        <View style={styles.mainContainer}>
-          <View style={styles.logoContainer}>
-            <Image source={icons.logo} />
-          </View>
-          <View style={styles.loginContainer}>
-            <TouchableOpacity style={styles.loginButton}
-              onPress={this.onButtonPress}>
-              <View style={styles.loginContent}>
-                <View style={styles.loginIcon}>
-                  <Image source={icons.facebook} />
-                </View>
-                <View style={styles.loginLabel}>
-                  <Text style={styles.loginText}>
-                    LOG IN WITH FACEBOOK
-                </Text>
-                </View>
+      <View style={styles.mainContainer}>
+        <View style={styles.logoContainer}>
+          <Image source={icons.logo} />
+        </View>
+        <View style={styles.loginContainer}>
+          <TouchableOpacity style={styles.loginButton}
+            onPress={this.onButtonPress}>
+            <View style={styles.loginContent}>
+              <View style={styles.loginIcon}>
+                <Image source={icons.facebook} />
               </View>
+              <View style={styles.loginLabel}>
+                <Text style={styles.loginText}>
+                  LOG IN WITH FACEBOOK
+                </Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.locationActionContainer}>
+          <View style={styles.saveContainer}>
+            <TouchableOpacity style={styles.saveButton}
+              onPress={() => this.onButtonSavePress(navigate)}>
+              <Text style={styles.saveText}>
+                SAVE LOCATION
+             </Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.locationActionContainer}>
-            <View style={styles.saveContainer}>
-              <TouchableOpacity style={styles.saveButton}
-                onPress={() => this.onButtonSavePress(navigate)}>
-                <Text style={styles.saveText}>
-                  SAVE LOCATION
+          <View style={styles.visitedContainer}>
+            <TouchableOpacity style={styles.visitedButton}
+              onPress={() => this.onButtonVisitedPress(navigate)}>
+              <Text style={styles.visitedText}>
+                VISITED PLACES
              </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.visitContainer}>
-              <TouchableOpacity style={styles.visitButton}
-                onPress={this.onButtonPress}>
-                <Text style={styles.visitText}>
-                  VISITED PLACES
-             </Text>
-              </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
+      </View>
     )
   }
 }
@@ -128,10 +131,10 @@ const styles = StyleSheet.create({
     fontFamily: 'ProximaNovaSoft-Medium',
     fontWeight: 'bold'
   },
-  visitContainer: {
+  visitedContainer: {
     alignItems: 'center'
   },
-  visitButton: {
+  visitedButton: {
     height: 60,
     width: '80%',
     backgroundColor: '#FFFFFF',
@@ -140,7 +143,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  visitText: {
+  visitedText: {
     color: '#FD482E',
     textAlign: 'center',
     fontSize: 20,
