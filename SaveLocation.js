@@ -117,7 +117,6 @@ export default class SaveLocation extends Component {
       return (
         <View style={styles.mainContainter}>
           <MapView style={styles.mapContainer}
-            ref={map => { this._map = map }}
             initialCenterCoordinate={this.state.coordinate}
             initialZoomLevel={15}
             showsUserLocation={true}
