@@ -6,10 +6,12 @@ import { StackNavigator } from 'react-navigation'
 
 import HomeScreen from './HomeScreen'
 import SaveLocation from './SaveLocation'
+import VisitedLocations from './VisitedLocations'
 
 const NeverForgotYourLocation = StackNavigator({
   Home: { screen: HomeScreen },
-  SaveLocation: { screen: SaveLocation }
+  SaveLocation: { screen: SaveLocation },
+  VisitedLocations: { screen: VisitedLocations }
 })
 
 AppRegistry.registerComponent('NeverForgotYourLocation', () => NeverForgotYourLocation)
