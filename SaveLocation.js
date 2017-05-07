@@ -198,7 +198,6 @@ const styles = StyleSheet.create({
     flex: 0.85,
     color: '#000000',
     fontSize: 16,
-    fontFamily: "Helvetica",
     fontWeight: 'normal',
     paddingLeft: 7,
     fontFamily: 'ProximaNovaSoft-Regular'
