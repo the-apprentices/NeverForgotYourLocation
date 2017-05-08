@@ -9,46 +9,32 @@ import {
 export default class SwitchButton extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      backgroundColorButtonLeft: '#FD482E',
-      textColorButtonLeft: '#ffffff',
-      backgroundColorButtonRight: '#D7D8DA',
-      textColorButtonRight: '#FD482E'
-    }
   }
   static propTypes = {
+    leftButtonBackgroundColor: PropTypes.string.isRequired,
+    rightButtonBackgroundColor: PropTypes.string.isRequired,
+    leftButtonTextColor: PropTypes.string.isRequired,
+    rightButtonTextColor: PropTypes.string.isRequired,
     onSwitchButtonPress: PropTypes.func.isRequired
   }
-  switchToLeft() {
+  onSwitchToLeft() {
     this.props.onSwitchButtonPress(true)
-    this.setState({
-      backgroundColorButtonLeft: '#FD482E',
-      textColorButtonLeft: '#ffffff',
-      backgroundColorButtonRight: '#D7D8DA',
-      textColorButtonRight: '#FD482E'
-    })
   }
-  switchToRight() {
+  onSwitchToRight() {
     this.props.onSwitchButtonPress(false)
-    this.setState({
-      backgroundColorButtonLeft: '#D7D8DA',
-      textColorButtonLeft: '#FD482E',
-      backgroundColorButtonRight: '#FD482E',
-      textColorButtonRight: '#ffffff'
-    })
   }
   render() {
     return (
       <View style={styles.mainContainer}>
         <Button buttonText='FRIENDS'
-          backgroundColor={this.state.backgroundColorButtonLeft}
-          textColor={this.state.textColorButtonLeft}
-          switchState={this.switchToLeft.bind(this)}
+          backgroundColor={this.props.leftButtonBackgroundColor}
+          textColor={this.props.leftButtonTextColor}
+          onSwitchState={this.onSwitchToLeft.bind(this)}
         />
         <Button buttonText='LOCATIONS'
-          backgroundColor={this.state.backgroundColorButtonRight}
-          textColor={this.state.textColorButtonRight}
-          switchState={this.switchToRight.bind(this)}
+          backgroundColor={this.props.rightButtonBackgroundColor}
+          textColor={this.props.rightButtonTextColor}
+          onSwitchState={this.onSwitchToRight.bind(this)}
         />
       </View>
     )
@@ -63,10 +49,10 @@ class Button extends Component {
     buttonText: PropTypes.string.isRequired,
     backgroundColor: PropTypes.string.isRequired,
     textColor: PropTypes.string.isRequired,
-    switchState: PropTypes.func.isRequired
+    onSwitchState: PropTypes.func.isRequired
   }
   onButtonPress() {
-    this.props.switchState()
+    this.props.onSwitchState()
   }
   render() {
     const backgroundColorState = { backgroundColor: this.props.backgroundColor }
