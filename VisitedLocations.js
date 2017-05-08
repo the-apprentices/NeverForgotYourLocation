@@ -45,9 +45,13 @@ const styles = StyleSheet.create({
 export default class VisitedLocations extends Component {
   constructor(props) {
     super(props)
+    this.leftPageState = 0
+    this.rightPageState = 1
     this.state = {
-      pageNumber: 0,
-      isLeft: true
+      leftButtonBackgroundColor: '#FD482E',
+      rightButtonBackgroundColor: '#D7D8DA',
+      leftButtonTextColor: '#ffffff',
+      rightButtonTextColor: '#FD482E'
     }
   }
   static navigationOptions = ({ navigation }) => {
@@ -69,22 +73,36 @@ export default class VisitedLocations extends Component {
       </TouchableNativeFeedback>
     }
   }
+  changeLeftButtonState() {
+    this.setState({
+        leftButtonBackgroundColor: '#FD482E',
+        rightButtonBackgroundColor: '#D7D8DA',
+        leftButtonTextColor: '#ffffff',
+        rightButtonTextColor: '#FD482E'
+      })
+  }
+  chanRightButtonState() {
+    this.setState({
+        leftButtonBackgroundColor: '#D7D8DA',
+        rightButtonBackgroundColor: '#FD482E',
+        leftButtonTextColor: '#FD482E',
+        rightButtonTextColor: '#ffffff'
+      })
+  }
   onPageSelected = (e) => {
-    this.setState({
-      pageNumber: e.nativeEvent.positon
-    })
-  }
-  onSwitchButtonPress(buttonState) {
-    this.setState({
-      isLeft: buttonState
-    })
-    this.onSwitchButtonSelected()
-  }
-  onSwitchButtonSelected() {
-    if (this.state.isLeft) {
-      this.viewPager.setPage(0)
+    if (e.nativeEvent.position === this.leftPageState) {
+      this.changeLeftButtonState()
     } else {
-      this.viewPager.setPage(1)
+      this.chanRightButtonState()
+    }
+  }
+  changeButtonStateWhenClick(buttonLeftState) {
+    if (buttonLeftState) {
+      this.viewPager.setPage(this.leftPageState)
+      this.changeLeftButtonState()
+    } else {
+      this.viewPager.setPage(this.rightPageState)
+      this.chanRightButtonState()
     }
   }
   render() {
@@ -92,21 +110,25 @@ export default class VisitedLocations extends Component {
       <View style={styles.mainContainer}>
         <ViewPagerAndroid style={styles.viewPagerContainer}
           ref={(viewPager) => { this.viewPager = viewPager }}
-          initialPage={0}
+          initialPage={this.leftPageState}
           onPageSelected={this.onPageSelected}>
-          <View>
-            <ViewLocations />
-          </View>
           <View>
             <ViewFriends />
           </View>
+          <View>
+            <ViewLocations />
+          </View>
         </ViewPagerAndroid>
         <View style={styles.switchButtonContainer}>
-          <SwitchButton onSwitchButtonPress={this.onSwitchButtonPress.bind(this)}
+          <SwitchButton
+            leftButtonBackgroundColor={this.state.leftButtonBackgroundColor}
+            rightButtonBackgroundColor={this.state.rightButtonBackgroundColor}
+            leftButtonTextColor={this.state.leftButtonTextColor}
+            rightButtonTextColor={this.state.rightButtonTextColor}
+            onSwitchButtonPress={this.changeButtonStateWhenClick.bind(this)}
           />
         </View>
       </View>
     )
   }
 }
-
