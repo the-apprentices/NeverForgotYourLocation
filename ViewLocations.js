@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import {
   StyleSheet,
   Text,
@@ -7,13 +7,22 @@ import {
 import Mapbox, { MapView } from './src/config/Mapbox'
 
 export default class ViewLocations extends Component {
+  constructor(props) {
+    super(props)
+  }
+  static propTypes = {
+    annotations: PropTypes.array.isRequired,
+    coordinate: PropTypes.object.isRequired
+  }
   render() {
     return (
       <View style={styles.mainContainer}>
         <MapView style={styles.mapContainer}
+          initialCenterCoordinate={this.props.coordinate}
           initialZoomLevel={15}
           showsUserLocation={true}
-          styleURL={Mapbox.mapStyles.streets}>
+          styleURL={Mapbox.mapStyles.streets}
+          annotations={this.props.annotations}>
         </MapView>
       </View>
     )
