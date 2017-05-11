@@ -6,11 +6,11 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
-  ToastAndroid,
-  AsyncStorage
+  ToastAndroid
 } from 'react-native'
 import Spinner from 'react-native-spinkit'
 import Mapbox, { MapView } from './src/config/Mapbox'
+import Helpers from './src/helpers/handleData'
 
 const icons = {
   user: require('./src/assets/imgs/user.png'),
@@ -25,45 +25,40 @@ export default class SaveLocation extends Component {
     super(props)
     this.state = {
       isLoading: true,
-      coordinate: {
-        longitude: null,
-        latitude: null
-      },
+      coordinate: null,
       annotations: null,
       placeName: null,
       placeAddress: null
     }
   }
-  componentDidMount() {
-    // AsyncStorage.clear((err)=>{})
+  getCurrentLocation = async () => {
     navigator.geolocation.getCurrentPosition((position) => {
-      let coordinate = {}
-      coordinate.longitude = position.coords.longitude
-      coordinate.latitude = position.coords.latitude
       this.setState({
-        coordinate: coordinate
+        coordinate: {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        }
       })
     })
-    AsyncStorage.getAllKeys((err, keys) => {
-      AsyncStorage.multiGet(keys, (err, locations) => {
-        let annotations = []
-        locations.map((result, idx, location) => {
-          let data = JSON.parse(location[idx][1])
-          let annotation = {
-            coordinates: data.coordinates,
-            type: 'point',
-            title: data.placeName,
-            subtitle: data.placeAddress,
-            id: location[idx][0]
-          }
-          annotations.push(annotation)
-        })
-        this.setState({
-          annotations: annotations,
-          isLoading: false
-        })
-      })
-    })
+  }
+  getAllAnnotations = async () => {
+    let annotations = await Helpers.getAllAnnotations()
+    return annotations
+  }
+  componentDidMount() {
+    this.getCurrentLocation()
+      .then(() => this.getAllAnnotations())
+      .then((annotations) => this.setState({ annotations }))
+      .then(() => this.setState({ isLoading: false }))
+      .catch((err) => ToastAndroid.show('Can not get your location' + err, ToastAndroid.LONG))
+  }
+  saveCurrentLocation = async (data) => {
+    let uid = await Helpers.saveCurrentLocation(data)
+    return uid
+  }
+  getNewAnnotation = async (uid) => {
+    let annotation = await Helpers.getNewAnnotation(uid)
+    return annotation
   }
   onButtonSavePress(navigate) {
     if (!this.state.placeName) {
@@ -72,35 +67,28 @@ export default class SaveLocation extends Component {
     } else if (!this.state.placeAddress) {
       ToastAndroid.showWithGravity('Please type your place address!',
         ToastAndroid.LONG, ToastAndroid.CENTER)
-    } else if ((!this.state.coordinate.latitude) || (!this.state.coordinate.longitude)) {
+    } else if (!this.state.coordinate) {
       ToastAndroid.showWithGravity('Cannot get your location, please try later!',
         ToastAndroid.LONG, ToastAndroid.CENTER)
     } else {
-      let uid = this.state.coordinate.latitude.toString() + this.state.coordinate.longitude.toString()
       let dataToSave = {
-        coordinates: [this.state.coordinate.latitude, this.state.coordinate.longitude],
+        coordinate: this.state.coordinate,
         placeName: this.state.placeName,
         placeAddress: this.state.placeAddress
       }
-      AsyncStorage.setItem(uid, JSON.stringify(dataToSave), () => {
-        AsyncStorage.getItem(uid, (err, location) => {
-          let data = JSON.parse(location)
+      this.saveCurrentLocation(dataToSave)
+        .then((uid) => this.getNewAnnotation(uid))
+        .then((annotation) => {
           let annotations = this.state.annotations.concat()
-          let annotation = {
-            coordinates: data.coordinates,
-            type: 'point',
-            title: data.placeName,
-            subtitle: data.placeAddress,
-            id: uid
-          }
           annotations.push(annotation)
           this.setState({ annotations })
         })
-      })
-      ToastAndroid.show('Save Location successfully!', ToastAndroid.LONG)
-      setTimeout(() => {
-        navigate('Home')
-      }, 500)
+        .then(() => {
+          ToastAndroid.show('Save Location successfully!', ToastAndroid.LONG)
+          setTimeout(() => {
+            navigate('Home')
+          }, 500)
+        })
     }
   }
   render() {
