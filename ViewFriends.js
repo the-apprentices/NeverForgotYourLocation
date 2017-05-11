@@ -4,7 +4,8 @@ import {
   View,
   ListView,
   Text,
-  Image
+  Image,
+  TouchableHighlight
 } from 'react-native'
 
 export default class ViewFriends extends Component {
@@ -13,7 +14,8 @@ export default class ViewFriends extends Component {
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 != r2 })
   }
   static propTypes = {
-    listFriendData: PropTypes.array.isRequired
+    listFriendData: PropTypes.array.isRequired,
+    onListViewElementSelected: PropTypes.func.isRequired
   }
   render() {
     return (
@@ -21,7 +23,11 @@ export default class ViewFriends extends Component {
         <ListView style={styles.listFriends}
           enableEmptySections={true}
           dataSource={this.ds.cloneWithRows(this.props.listFriendData)}
-          renderRow={(data) => <Friend {...data} />}
+          renderRow={(data) =>
+            <Friend
+              {...data}
+              onListViewElementSelected={this.props.onListViewElementSelected}
+            />}
         />
       </View>
     )
@@ -32,25 +38,42 @@ class Friend extends Component {
   constructor(props) {
     super(props)
   }
+  static propTypes = {
+    coordinate: PropTypes.object.isRequired,
+    title: PropTypes.string.isRequired,
+    subtitle: PropTypes.string.isRequired,
+    createAt: PropTypes.string.isRequired,
+    avatar: PropTypes.object.isRequired,
+    onListViewElementSelected: PropTypes.func.isRequired
+  }
+  onRowPress() {
+    this.props.onListViewElementSelected(this.props.coordinate)
+  }
   render() {
     return (
-      <View style={styles.friendContainer}>
-        <View style={styles.avatarContainer}>
-          <View style={styles.avatarWrap}>
-            <Image style={styles.avatarContent} source={require('./src/assets/imgs/avatar.png')} />
+      <TouchableHighlight underlayColor={'#00f9ff'}
+        onPress={() => this.onRowPress()}>
+        <View style={styles.friendContainer}>
+          <View style={styles.avatarContainer}>
+            <View style={styles.avatarWrap}>
+              <View style={[styles.avatarContent, { backgroundColor: this.props.avatar.color }]}>
+                <Text style={styles.avatarLetter}>{this.props.avatar.letter}</Text>
+              </View>
+            </View>
+          </View>
+          <View style={styles.informationContainer}>
+            <View>
+              <Text style={styles.friendName}>{this.props.title}</Text>
+            </View>
+            <View>
+              <Text style={styles.friendAddress}>{this.props.subtitle}</Text>
+            </View>
+          </View>
+          <View style={styles.dateContainer}>
+            <Text style={styles.dateFormat}>{this.props.createAt}</Text>
           </View>
         </View>
-        <View style={styles.informationContainer}>
-          <View>
-            <Text style={styles.friendName}>{this.props.title}</Text>
-          </View>
-          <View>
-            <Text style={styles.friendAddress}>{this.props.subtitle}</Text>
-          </View>
-        </View>
-        <View style={styles.dateContainer}>
-        </View>
-      </View>
+      </TouchableHighlight>
     )
   }
 }
@@ -87,7 +110,14 @@ const styles = StyleSheet.create({
   avatarContent: {
     width: 60,
     height: 60,
-    borderRadius: 30
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  avatarLetter: {
+    color: '#000000',
+    fontSize: 36,
+    fontFamily: 'ProximaNovaSoft-Regular'
   },
   informationContainer: {
     flex: 0.5,
@@ -105,5 +135,11 @@ const styles = StyleSheet.create({
   },
   dateContainer: {
     flex: 0.3,
+    padding: 5
+  },
+  dateFormat: {
+    color: '#000000',
+    fontSize: 18,
+    fontFamily: 'ProximaNovaSoft-Regular'
   }
 })
