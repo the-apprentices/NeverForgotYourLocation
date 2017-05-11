@@ -90,7 +90,7 @@ export default class VisitedLocations extends Component {
       rightButtonTextColor: '#FD482E'
     })
   }
-  chanRightButtonState() {
+  changeRightButtonState() {
     this.setState({
       leftButtonBackgroundColor: '#D7D8DA',
       rightButtonBackgroundColor: '#FD482E',
@@ -102,8 +102,12 @@ export default class VisitedLocations extends Component {
     if (e.nativeEvent.position === this.leftPageState) {
       this.changeLeftButtonState()
     } else {
-      this.chanRightButtonState()
+      this.changeRightButtonState()
     }
+  }
+  onListViewElementSelected(coordinate) {
+    this.setState({ coordinate })
+    this.changeButtonStateWhenClick(false)
   }
   changeButtonStateWhenClick(buttonLeftState) {
     if (buttonLeftState) {
@@ -111,7 +115,7 @@ export default class VisitedLocations extends Component {
       this.changeLeftButtonState()
     } else {
       this.viewPager.setPage(this.rightPageState)
-      this.chanRightButtonState()
+      this.changeRightButtonState()
     }
   }
   getFriendData = async () => {
@@ -149,6 +153,7 @@ export default class VisitedLocations extends Component {
             onPageSelected={this.onPageSelected}>
             <View>
               <ViewFriends listFriendData={this.state.listFriendData}
+                onListViewElementSelected={this.onListViewElementSelected.bind(this)}
               />
             </View>
             <View>
