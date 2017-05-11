@@ -8,7 +8,8 @@ import {
   TouchableNativeFeedback
 } from 'react-native'
 import { NavigationActions } from 'react-navigation'
-import { TabNavigator } from 'react-navigation'
+import Spinner from 'react-native-spinkit'
+import Helpers from './src/helpers/handleData'
 
 import SwitchButton from './SwitchButton'
 import ViewFriends from './ViewFriends'
@@ -27,6 +28,11 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     flex: 1
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   viewPagerContainer: {
     flex: 1
@@ -51,7 +57,10 @@ export default class VisitedLocations extends Component {
       leftButtonBackgroundColor: '#FD482E',
       rightButtonBackgroundColor: '#D7D8DA',
       leftButtonTextColor: '#ffffff',
-      rightButtonTextColor: '#FD482E'
+      rightButtonTextColor: '#FD482E',
+      listFriendData: null,
+      listAnnotationData: null,
+      coordinate: null
     }
   }
   static navigationOptions = ({ navigation }) => {
@@ -75,19 +84,19 @@ export default class VisitedLocations extends Component {
   }
   changeLeftButtonState() {
     this.setState({
-        leftButtonBackgroundColor: '#FD482E',
-        rightButtonBackgroundColor: '#D7D8DA',
-        leftButtonTextColor: '#ffffff',
-        rightButtonTextColor: '#FD482E'
-      })
+      leftButtonBackgroundColor: '#FD482E',
+      rightButtonBackgroundColor: '#D7D8DA',
+      leftButtonTextColor: '#ffffff',
+      rightButtonTextColor: '#FD482E'
+    })
   }
   chanRightButtonState() {
     this.setState({
-        leftButtonBackgroundColor: '#D7D8DA',
-        rightButtonBackgroundColor: '#FD482E',
-        leftButtonTextColor: '#FD482E',
-        rightButtonTextColor: '#ffffff'
-      })
+      leftButtonBackgroundColor: '#D7D8DA',
+      rightButtonBackgroundColor: '#FD482E',
+      leftButtonTextColor: '#FD482E',
+      rightButtonTextColor: '#ffffff'
+    })
   }
   onPageSelected = (e) => {
     if (e.nativeEvent.position === this.leftPageState) {
@@ -105,30 +114,60 @@ export default class VisitedLocations extends Component {
       this.chanRightButtonState()
     }
   }
+  getFriendData = async () => {
+    let friends = await Helpers.getAllFriends()
+    return friends
+  }
+  getAnnotationData = async () => {
+    let annotations = await Helpers.getAllAnnotations()
+    return annotations
+  }
+  componentDidMount() {
+    this.getFriendData().then((listFriendData) =>
+      this.setState({
+        listFriendData: listFriendData,
+        coordinate: listFriendData[0].coordinate
+      }))
+      .then(() => this.getAnnotationData())
+      .then((listAnnotationData) => this.setState({ listAnnotationData }))
+      // TODO
+      .catch((err) => { })
+  }
   render() {
-    return (
-      <View style={styles.mainContainer}>
-        <ViewPagerAndroid style={styles.viewPagerContainer}
-          ref={(viewPager) => { this.viewPager = viewPager }}
-          initialPage={this.leftPageState}
-          onPageSelected={this.onPageSelected}>
-          <View>
-            <ViewFriends />
-          </View>
-          <View>
-            <ViewLocations />
-          </View>
-        </ViewPagerAndroid>
-        <View style={styles.switchButtonContainer}>
-          <SwitchButton
-            leftButtonBackgroundColor={this.state.leftButtonBackgroundColor}
-            rightButtonBackgroundColor={this.state.rightButtonBackgroundColor}
-            leftButtonTextColor={this.state.leftButtonTextColor}
-            rightButtonTextColor={this.state.rightButtonTextColor}
-            onSwitchButtonPress={this.changeButtonStateWhenClick.bind(this)}
-          />
+    if ((!this.state.listFriendData) || (!this.state.listAnnotationData) || (!this.state.coordinate)) {
+      return (
+        <View style={styles.loadingContainer}>
+          <Spinner size={100} color={'#358ff4'} type={'Bounce'} />
         </View>
-      </View>
-    )
+      )
+    } else {
+      return (
+        <View style={styles.mainContainer}>
+          <ViewPagerAndroid style={styles.viewPagerContainer}
+            ref={(viewPager) => { this.viewPager = viewPager }}
+            initialPage={this.leftPageState}
+            onPageSelected={this.onPageSelected}>
+            <View>
+              <ViewFriends listFriendData={this.state.listFriendData}
+              />
+            </View>
+            <View>
+              <ViewLocations coordinate={this.state.coordinate}
+                annotations={this.state.listAnnotationData}
+              />
+            </View>
+          </ViewPagerAndroid>
+          <View style={styles.switchButtonContainer}>
+            <SwitchButton
+              leftButtonBackgroundColor={this.state.leftButtonBackgroundColor}
+              rightButtonBackgroundColor={this.state.rightButtonBackgroundColor}
+              leftButtonTextColor={this.state.leftButtonTextColor}
+              rightButtonTextColor={this.state.rightButtonTextColor}
+              onSwitchButtonPress={this.changeButtonStateWhenClick.bind(this)}
+            />
+          </View>
+        </View>
+      )
+    }
   }
 }
