@@ -54,6 +54,7 @@ export default class VisitedLocations extends Component {
     this.leftPageState = 0
     this.rightPageState = 1
     this.state = {
+      isLoading: true,
       leftButtonBackgroundColor: '#FD482E',
       rightButtonBackgroundColor: '#D7D8DA',
       leftButtonTextColor: '#ffffff',
@@ -98,6 +99,15 @@ export default class VisitedLocations extends Component {
       rightButtonTextColor: '#ffffff'
     })
   }
+  changeButtonStateWhenClick(buttonLeftState) {
+    if (buttonLeftState) {
+      this.viewPager.setPage(this.leftPageState)
+      this.changeLeftButtonState()
+    } else {
+      this.viewPager.setPage(this.rightPageState)
+      this.changeRightButtonState()
+    }
+  }
   onPageSelected = (e) => {
     if (e.nativeEvent.position === this.leftPageState) {
       this.changeLeftButtonState()
@@ -109,15 +119,6 @@ export default class VisitedLocations extends Component {
     this.setState({ coordinate })
     this.changeButtonStateWhenClick(false)
   }
-  changeButtonStateWhenClick(buttonLeftState) {
-    if (buttonLeftState) {
-      this.viewPager.setPage(this.leftPageState)
-      this.changeLeftButtonState()
-    } else {
-      this.viewPager.setPage(this.rightPageState)
-      this.changeRightButtonState()
-    }
-  }
   getFriendData = async () => {
     let friends = await Helpers.getAllFriends()
     return friends
@@ -127,18 +128,27 @@ export default class VisitedLocations extends Component {
     return annotations
   }
   componentDidMount() {
-    this.getFriendData().then((listFriendData) =>
-      this.setState({
-        listFriendData: listFriendData,
-        coordinate: listFriendData[0].coordinate
-      }))
+    this.getFriendData().then((listFriendData) => {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.setState({
+          listFriendData: listFriendData,
+          coordinate: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          }
+        })
+      })
+    })
       .then(() => this.getAnnotationData())
-      .then((listAnnotationData) => this.setState({ listAnnotationData }))
+      .then((listAnnotationData) => this.setState({
+        listAnnotationData: listAnnotationData,
+        isLoading: false
+      }))
       // TODO
       .catch((err) => { })
   }
   render() {
-    if ((!this.state.listFriendData) || (!this.state.listAnnotationData) || (!this.state.coordinate)) {
+    if (this.state.isLoading) {
       return (
         <View style={styles.loadingContainer}>
           <Spinner size={100} color={'#358ff4'} type={'Bounce'} />
