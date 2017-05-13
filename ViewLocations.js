@@ -14,10 +14,16 @@ export default class ViewLocations extends Component {
     annotations: PropTypes.array.isRequired,
     coordinate: PropTypes.object.isRequired
   }
+  componentWillReceiveProps(nextProps) {
+    if (JSON.stringify(this.props.coordinate) !== JSON.stringify(nextProps.coordinate))
+      this.mapView.setCenterCoordinate(nextProps.coordinate.latitude,
+        nextProps.coordinate.longitude, animated = true)
+  }
   render() {
     return (
       <View style={styles.mainContainer}>
-        <MapView style={styles.mapContainer}
+        <MapView ref={(mapView) => this.mapView = mapView}
+          style={styles.mapContainer}
           initialCenterCoordinate={this.props.coordinate}
           initialZoomLevel={15}
           showsUserLocation={true}
