@@ -48,8 +48,10 @@ export default class SaveLocation extends Component {
   componentDidMount() {
     this.getCurrentLocation()
       .then(() => this.getAllAnnotations())
-      .then((annotations) => this.setState({ annotations }))
-      .then(() => this.setState({ isLoading: false }))
+      .then((annotations) => this.setState({
+        annotations: annotations,
+        isLoading: false
+      }))
       .catch((err) => ToastAndroid.show('Can not get your location' + err, ToastAndroid.LONG))
   }
   saveCurrentLocation = async (data) => {
