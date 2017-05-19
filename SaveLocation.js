@@ -31,6 +31,10 @@ export default class SaveLocation extends Component {
       placeAddress: null
     }
   }
+  getAllAnnotations = async () => {
+    let annotations = await Helpers.getAllAnnotations()
+    return annotations
+  }
   getCurrentLocation = async () => {
     navigator.geolocation.getCurrentPosition((position) => {
       this.setState({
@@ -39,20 +43,21 @@ export default class SaveLocation extends Component {
           longitude: position.coords.longitude
         }
       })
-    })
-  }
-  getAllAnnotations = async () => {
-    let annotations = await Helpers.getAllAnnotations()
-    return annotations
+      this.getAllAnnotations()
+        .then((annotations) => this.setState({ annotations: annotations }))
+        .then(() => Helpers.getAddress(this.state.coordinate))
+        .then(({ placeName, placeAddress }) => this.setState({
+          placeName: placeName,
+          placeAddress: placeAddress,
+          isLoading: false
+        }))
+    },
+      (error) => ToastAndroid.show('Can not get your location', ToastAndroid.LONG)
+    )
   }
   componentDidMount() {
     this.getCurrentLocation()
-      .then(() => this.getAllAnnotations())
-      .then((annotations) => this.setState({
-        annotations: annotations,
-        isLoading: false
-      }))
-      .catch((err) => ToastAndroid.show('Can not get your location' + err, ToastAndroid.LONG))
+      .catch((err) => ToastAndroid.show('Can not get your location', ToastAndroid.LONG))
   }
   saveCurrentLocation = async (data) => {
     let uid = await Helpers.saveCurrentLocation(data)
