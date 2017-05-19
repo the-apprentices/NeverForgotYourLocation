@@ -5,6 +5,7 @@ import {
   ViewPagerAndroid,
   Image,
   Text,
+  ToastAndroid,
   TouchableNativeFeedback
 } from 'react-native'
 import { NavigationActions } from 'react-navigation'
@@ -15,7 +16,7 @@ import SwitchButton from './SwitchButton'
 import ViewFriends from './ViewFriends'
 import ViewLocations from './ViewLocations'
 
-const goToHome = NavigationActions.navigate({
+const goToHome = NavigationActions.back({
   routeName: 'Home'
 })
 
@@ -128,6 +129,7 @@ export default class VisitedLocations extends Component {
     return annotations
   }
   componentDidMount() {
+    // Tách get friends ra
     this.getFriendData().then((listFriendData) => {
       navigator.geolocation.getCurrentPosition((position) => {
         this.setState({
@@ -137,15 +139,14 @@ export default class VisitedLocations extends Component {
             longitude: position.coords.longitude
           }
         })
+        this.getAnnotationData()
+          .then((listAnnotationData) => this.setState({
+            listAnnotationData: listAnnotationData,
+            isLoading: false
+          }))
       })
     })
-      .then(() => this.getAnnotationData())
-      .then((listAnnotationData) => this.setState({
-        listAnnotationData: listAnnotationData,
-        isLoading: false
-      }))
-      // TODO
-      .catch((err) => { })
+      .catch((err) => ToastAndroid.show('Can not get your location', ToastAndroid.LONG))
   }
   render() {
     if (this.state.isLoading) {
