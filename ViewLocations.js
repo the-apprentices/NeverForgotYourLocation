@@ -11,21 +11,19 @@ export default class ViewLocations extends Component {
     super(props)
   }
   static propTypes = {
-    annotations: PropTypes.array.isRequired,
-    coordinate: PropTypes.object.isRequired
+    annotations: PropTypes.array.isRequired
   }
   componentWillReceiveProps(nextProps) {
     if (JSON.stringify(this.props.coordinate) !== JSON.stringify(nextProps.coordinate))
-      this.mapView.setCenterCoordinate(nextProps.coordinate.latitude,
-        nextProps.coordinate.longitude, animated = true)
+      this.mapView.setCenterCoordinateZoomLevel(nextProps.coordinate.latitude,
+        nextProps.coordinate.longitude, 15, animated = true)
   }
   render() {
     return (
       <View style={styles.mainContainer}>
         <MapView ref={(mapView) => this.mapView = mapView}
           style={styles.mapContainer}
-          initialCenterCoordinate={this.props.coordinate}
-          initialZoomLevel={15}
+          initialZoomLevel={0}
           showsUserLocation={true}
           styleURL={Mapbox.mapStyles.streets}
           annotations={this.props.annotations}>
