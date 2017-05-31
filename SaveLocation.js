@@ -6,9 +6,10 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
-  ToastAndroid
+  ToastAndroid,
+  NetInfo
 } from 'react-native'
-import Spinner from 'react-native-spinkit'
+
 import Mapbox, { MapView } from './src/config/Mapbox'
 import Helpers from './src/helpers/handleData'
 
@@ -24,18 +25,14 @@ export default class SaveLocation extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isLoading: true,
       coordinate: null,
-      annotations: null,
+      annotations: [],
       placeName: null,
       placeAddress: null
     }
   }
-  getAllAnnotations = async () => {
-    let annotations = await Helpers.getAllAnnotations()
-    return annotations
-  }
-  getCurrentLocation = async () => {
+
+  getCurrentLocation() {
     navigator.geolocation.getCurrentPosition((position) => {
       this.setState({
         coordinate: {
@@ -43,21 +40,42 @@ export default class SaveLocation extends Component {
           longitude: position.coords.longitude
         }
       })
-      this.getAllAnnotations()
-        .then((annotations) => this.setState({ annotations: annotations }))
-        .then(() => Helpers.getAddress(this.state.coordinate))
-        .then(({ placeName, placeAddress }) => this.setState({
-          placeName: placeName,
-          placeAddress: placeAddress,
-          isLoading: false
-        }))
+      this.map.setCenterCoordinateZoomLevel(position.coords.latitude, position.coords.longitude, 15, animated = true)
     },
       (error) => ToastAndroid.show('Can not get your location', ToastAndroid.LONG)
     )
   }
+  getAllAnnotations = async () => {
+    let annotations = await Helpers.getAllAnnotations()
+    return annotations
+  }
+  handleConnectivityChange = (isConnected) => {
+    if ((isConnected) && (this.state.coordinate)) {
+      Helpers.getAddress(this.state.coordinate)
+        .then(({ placeName, placeAddress }) => this.setState({
+          placeName: placeName,
+          placeAddress: placeAddress
+        }))
+    }
+  }
   componentDidMount() {
     this.getCurrentLocation()
+    this.getAllAnnotations()
+      .then((annotations) => this.setState({ annotations: annotations }))
       .catch((err) => ToastAndroid.show('Can not get your location', ToastAndroid.LONG))
+    NetInfo.isConnected.addEventListener(
+      'change',
+      this.handleConnectivityChange
+    )
+    NetInfo.isConnected.fetch().done(
+      this.handleConnectivityChange
+    )
+  }
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener(
+      'change',
+      this.handleConnectivityChange
+    )
   }
   saveCurrentLocation = async (data) => {
     let uid = await Helpers.saveCurrentLocation(data)
@@ -100,65 +118,55 @@ export default class SaveLocation extends Component {
   }
   render() {
     const { navigate } = this.props.navigation
-    if (this.state.isLoading) {
-      return (
-        <View style={styles.mainContainter}>
-          <View style={styles.loadingContainer}>
-            <Spinner size={100} color={'#358ff4'} type={'Bounce'} />
+    return (
+      <View style={styles.mainContainter}>
+        <MapView style={styles.mapContainer}
+          ref={(map) => this.map = map}
+          initialZoomLevel={0}
+          showsUserLocation={true}
+          styleURL={Mapbox.mapStyles.streets}
+          annotations={this.state.annotations}
+        />
+        <View style={styles.saveContainer}>
+          <View style={styles.placeContainer}>
+            <View style={styles.placeIcon}>
+              <Image source={icons.user}></Image>
+            </View>
+            <TextInput style={styles.placeText}
+              placeholder="Place name"
+              onChangeText={(placeName) => this.setState({ placeName })}
+              multiline={false}
+              underlineColorAndroid={'transparent'}
+              value={this.state.placeName}
+            />
+          </View>
+          <View style={styles.borderContainer}>
+            <View style={styles.borderWhite}></View>
+            <View style={styles.borderView}></View>
+          </View>
+          <View style={styles.placeContainer}>
+            <View style={styles.placeIcon}>
+              <Image source={icons.place}></Image>
+            </View>
+            <TextInput style={styles.placeText}
+              placeholder="Place address"
+              onChangeText={(placeAddress) => this.setState({ placeAddress })}
+              multiline={false}
+              underlineColorAndroid={'transparent'}
+              value={this.state.placeAddress}
+            />
           </View>
         </View>
-      )
-    } else {
-      return (
-        <View style={styles.mainContainter}>
-          <MapView style={styles.mapContainer}
-            initialCenterCoordinate={this.state.coordinate}
-            initialZoomLevel={15}
-            showsUserLocation={true}
-            styleURL={Mapbox.mapStyles.streets}
-            annotations={this.state.annotations}
-          />
-          <View style={styles.saveContainer}>
-            <View style={styles.placeContainer}>
-              <View style={styles.placeIcon}>
-                <Image source={icons.user}></Image>
-              </View>
-              <TextInput style={styles.placeText}
-                placeholder="Place name"
-                onChangeText={(placeName) => this.setState({ placeName })}
-                multiline={false}
-                underlineColorAndroid={'transparent'}
-                value={this.state.placeName}
-              />
-            </View>
-            <View style={styles.borderContainer}>
-              <View style={styles.borderWhite}></View>
-              <View style={styles.borderView}></View>
-            </View>
-            <View style={styles.placeContainer}>
-              <View style={styles.placeIcon}>
-                <Image source={icons.place}></Image>
-              </View>
-              <TextInput style={styles.placeText}
-                placeholder="Place address"
-                onChangeText={(placeAddress) => this.setState({ placeAddress })}
-                multiline={false}
-                underlineColorAndroid={'transparent'}
-                value={this.state.placeAddress}
-              />
-            </View>
-          </View>
-          <View style={styles.saveContent}>
-            <TouchableOpacity style={styles.saveButton}
-              onPress={() => this.onButtonSavePress(navigate)}>
-              <Text style={styles.saveText}>
-                SAVE
+        <View style={styles.saveContent}>
+          <TouchableOpacity style={styles.saveButton}
+            onPress={() => this.onButtonSavePress(navigate)}>
+            <Text style={styles.saveText}>
+              SAVE
              </Text>
-            </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
         </View>
-      )
-    }
+      </View>
+    )
   }
 }
 
@@ -167,11 +175,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'stretch',
     backgroundColor: '#FFFFFF'
-  },
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
   },
   mapContainer: {
     flex: 1
