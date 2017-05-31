@@ -7,6 +7,7 @@ import {
   Image,
   TouchableHighlight
 } from 'react-native'
+import Spinner from 'react-native-spinkit'
 
 export default class ViewFriends extends Component {
   constructor(props) {
@@ -18,19 +19,27 @@ export default class ViewFriends extends Component {
     onListViewElementSelected: PropTypes.func.isRequired
   }
   render() {
-    return (
-      <View style={styles.mainContainer}>
-        <ListView style={styles.listFriends}
-          enableEmptySections={true}
-          dataSource={this.ds.cloneWithRows(this.props.listFriendData)}
-          renderRow={(data) =>
-            <Friend
-              {...data}
-              onListViewElementSelected={this.props.onListViewElementSelected}
-            />}
-        />
-      </View>
-    )
+    if (this.props.listFriendData.length === 0) {
+      return (
+        <View style={styles.loadingContainer}>
+          <Spinner size={75} color={'#358ff4'} type={'ChasingDots'} />
+        </View>
+      )
+    } else {
+      return (
+        <View style={styles.mainContainer}>
+          <ListView style={styles.listFriends}
+            enableEmptySections={true}
+            dataSource={this.ds.cloneWithRows(this.props.listFriendData)}
+            renderRow={(data) =>
+              <Friend
+                {...data}
+                onListViewElementSelected={this.props.onListViewElementSelected}
+              />}
+          />
+        </View>
+      )
+    }
   }
 }
 
@@ -55,18 +64,16 @@ class Friend extends Component {
         onPress={() => this.onRowPress()}>
         <View style={styles.friendContainer}>
           <View style={styles.avatarContainer}>
-            <View style={styles.avatarWrap}>
-              <View style={[styles.avatarContent, { backgroundColor: this.props.avatar.color }]}>
-                <Text style={styles.avatarLetter}>{this.props.avatar.letter}</Text>
-              </View>
+            <View style={[styles.avatarContent, { backgroundColor: this.props.avatar.color }]}>
+              <Text style={styles.avatarLetter}>{this.props.avatar.letter}</Text>
             </View>
           </View>
           <View style={styles.informationContainer}>
             <View>
-              <Text style={styles.friendName}>{this.props.title}</Text>
+              <Text style={styles.friendName} numberOfLines={1}>{this.props.title}</Text>
             </View>
             <View>
-              <Text style={styles.friendAddress}>{this.props.subtitle}</Text>
+              <Text style={styles.friendAddress} numberOfLines={2}>{this.props.subtitle}</Text>
             </View>
           </View>
           <View style={styles.dateContainer}>
@@ -81,6 +88,12 @@ class Friend extends Component {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
+    backgroundColor: '#ffffff'
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#ffffff'
   },
   listFriends: {
@@ -101,9 +114,7 @@ const styles = StyleSheet.create({
     borderColor: '#D7D8DA'
   },
   avatarContainer: {
-    flex: 0.2
-  },
-  avatarWrap: {
+    flex: 0.2,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -135,10 +146,11 @@ const styles = StyleSheet.create({
   },
   dateContainer: {
     flex: 0.3,
-    padding: 5
+    padding: 6
   },
   dateFormat: {
     color: '#000000',
+    textAlign: 'center',
     fontSize: 18,
     fontFamily: 'ProximaNovaSoft-Regular'
   }
