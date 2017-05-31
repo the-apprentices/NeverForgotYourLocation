@@ -9,7 +9,6 @@ import {
   TouchableNativeFeedback
 } from 'react-native'
 import { NavigationActions } from 'react-navigation'
-import Spinner from 'react-native-spinkit'
 import Helpers from './src/helpers/handleData'
 
 import SwitchButton from './SwitchButton'
@@ -29,11 +28,6 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     flex: 1
-  },
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
   },
   viewPagerContainer: {
     flex: 1
@@ -55,13 +49,12 @@ export default class VisitedLocations extends Component {
     this.leftPageState = 0
     this.rightPageState = 1
     this.state = {
-      isLoading: true,
       leftButtonBackgroundColor: '#FD482E',
       rightButtonBackgroundColor: '#D7D8DA',
       leftButtonTextColor: '#ffffff',
       rightButtonTextColor: '#FD482E',
-      listFriendData: null,
-      listAnnotationData: null,
+      listFriendData: [],
+      listAnnotationData: [],
       coordinate: null
     }
   }
@@ -120,6 +113,18 @@ export default class VisitedLocations extends Component {
     this.setState({ coordinate })
     this.changeButtonStateWhenClick(false)
   }
+  getCurrentLocation() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.setState({
+        coordinate: {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        }
+      })
+    },
+      (error) => ToastAndroid.show('Can not get your location', ToastAndroid.LONG)
+    )
+  }
   getFriendData = async () => {
     let friends = await Helpers.getAllFriends()
     return friends
@@ -129,61 +134,43 @@ export default class VisitedLocations extends Component {
     return annotations
   }
   componentDidMount() {
-    // Tách get friends ra
-    this.getFriendData().then((listFriendData) => {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.setState({
-          listFriendData: listFriendData,
-          coordinate: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          }
-        })
-        this.getAnnotationData()
-          .then((listAnnotationData) => this.setState({
-            listAnnotationData: listAnnotationData,
-            isLoading: false
-          }))
+    this.getCurrentLocation()
+    this.getFriendData()
+      .then((listFriendData) => {
+        this.setState({ listFriendData })
+        return this.getAnnotationData()
       })
-    })
+      .then((listAnnotationData) => this.setState({ listAnnotationData }))
       .catch((err) => ToastAndroid.show('Can not get your location', ToastAndroid.LONG))
   }
   render() {
-    if (this.state.isLoading) {
-      return (
-        <View style={styles.loadingContainer}>
-          <Spinner size={100} color={'#358ff4'} type={'Bounce'} />
-        </View>
-      )
-    } else {
-      return (
-        <View style={styles.mainContainer}>
-          <ViewPagerAndroid style={styles.viewPagerContainer}
-            ref={(viewPager) => { this.viewPager = viewPager }}
-            initialPage={this.leftPageState}
-            onPageSelected={this.onPageSelected}>
-            <View>
-              <ViewFriends listFriendData={this.state.listFriendData}
-                onListViewElementSelected={this.onListViewElementSelected.bind(this)}
-              />
-            </View>
-            <View>
-              <ViewLocations coordinate={this.state.coordinate}
-                annotations={this.state.listAnnotationData}
-              />
-            </View>
-          </ViewPagerAndroid>
-          <View style={styles.switchButtonContainer}>
-            <SwitchButton
-              leftButtonBackgroundColor={this.state.leftButtonBackgroundColor}
-              rightButtonBackgroundColor={this.state.rightButtonBackgroundColor}
-              leftButtonTextColor={this.state.leftButtonTextColor}
-              rightButtonTextColor={this.state.rightButtonTextColor}
-              onSwitchButtonPress={this.changeButtonStateWhenClick.bind(this)}
+    return (
+      <View style={styles.mainContainer}>
+        <ViewPagerAndroid style={styles.viewPagerContainer}
+          ref={(viewPager) => { this.viewPager = viewPager }}
+          initialPage={this.leftPageState}
+          onPageSelected={this.onPageSelected}>
+          <View>
+            <ViewFriends listFriendData={this.state.listFriendData}
+              onListViewElementSelected={this.onListViewElementSelected.bind(this)}
             />
           </View>
+          <View>
+            <ViewLocations coordinate={this.state.coordinate}
+              annotations={this.state.listAnnotationData}
+            />
+          </View>
+        </ViewPagerAndroid>
+        <View style={styles.switchButtonContainer}>
+          <SwitchButton
+            leftButtonBackgroundColor={this.state.leftButtonBackgroundColor}
+            rightButtonBackgroundColor={this.state.rightButtonBackgroundColor}
+            leftButtonTextColor={this.state.leftButtonTextColor}
+            rightButtonTextColor={this.state.rightButtonTextColor}
+            onSwitchButtonPress={this.changeButtonStateWhenClick.bind(this)}
+          />
         </View>
-      )
-    }
+      </View>
+    )
   }
 }
