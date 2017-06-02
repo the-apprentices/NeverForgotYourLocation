@@ -16,7 +16,9 @@ export default class ViewLocations extends Component {
   componentWillReceiveProps(nextProps) {
     if (JSON.stringify(this.props.coordinate) !== JSON.stringify(nextProps.coordinate))
       this.mapView.setCenterCoordinateZoomLevel(nextProps.coordinate.latitude,
-        nextProps.coordinate.longitude, 15, animated = true)
+        nextProps.coordinate.longitude, 15)
+    if (this.props.selectedAnnotationId !== nextProps.selectedAnnotationId)
+      this.mapView.selectAnnotation(nextProps.selectedAnnotationId)
   }
   render() {
     return (
