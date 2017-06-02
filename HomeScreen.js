@@ -5,7 +5,7 @@ import {
   Text,
   Image,
   Alert,
-  TouchableOpacity
+  TouchableNativeFeedback
 } from 'react-native'
 
 const icons = {
@@ -21,10 +21,15 @@ export default class MainScreen extends Component {
     Alert.alert('Hihi')
   }
   onButtonSavePress(navigate) {
-    navigate('SaveLocation')
+    setTimeout(() => {
+      navigate('SaveLocation')
+    }, 100)
+
   }
   onButtonVisitedPress(navigate) {
-    navigate('VisitedLocations')
+    setTimeout(() => {
+      navigate('VisitedLocations')
+    }, 100)
   }
   render() {
     const { navigate } = this.props.navigation
@@ -34,11 +39,12 @@ export default class MainScreen extends Component {
           <Image source={icons.logo} />
         </View>
         <View style={styles.loginContainer}>
-          <TouchableOpacity style={styles.loginButton}
-            onPress={this.onButtonPress}>
+          <TouchableNativeFeedback
+            onPress={this.onButtonPress}
+            background={TouchableNativeFeedback.Ripple('#adadad', false)}>
             <View style={styles.loginContent}>
-              <View style={styles.loginIcon}>
-                <Image source={icons.facebook} />
+              <View style={styles.loginWrap}>
+                <Image style={styles.loginIcon} source={icons.facebook} />
               </View>
               <View style={styles.loginLabel}>
                 <Text style={styles.loginText}>
@@ -46,24 +52,30 @@ export default class MainScreen extends Component {
                 </Text>
               </View>
             </View>
-          </TouchableOpacity>
+          </TouchableNativeFeedback>
         </View>
         <View style={styles.locationActionContainer}>
           <View style={styles.saveContainer}>
-            <TouchableOpacity style={styles.saveButton}
-              onPress={() => this.onButtonSavePress(navigate)}>
-              <Text style={styles.saveText}>
-                SAVE LOCATION
-             </Text>
-            </TouchableOpacity>
+            <TouchableNativeFeedback
+              onPress={() => this.onButtonSavePress(navigate)}
+              background={TouchableNativeFeedback.Ripple('#adadad', false)}>
+              <View style={styles.saveButton}>
+                <Text style={styles.saveText}>
+                  SAVE LOCATION
+                </Text>
+              </View>
+            </TouchableNativeFeedback>
           </View>
           <View style={styles.visitedContainer}>
-            <TouchableOpacity style={styles.visitedButton}
-              onPress={() => this.onButtonVisitedPress(navigate)}>
-              <Text style={styles.visitedText}>
-                VISITED PLACES
+            <TouchableNativeFeedback
+              onPress={() => this.onButtonVisitedPress(navigate)}
+              background={TouchableNativeFeedback.Ripple('#adadad', false)}>
+              <View style={styles.visitedButton}>
+                <Text style={styles.visitedText}>
+                  VISITED PLACES
              </Text>
-            </TouchableOpacity>
+              </View>
+            </TouchableNativeFeedback>
           </View>
         </View>
       </View>
@@ -85,28 +97,32 @@ const styles = StyleSheet.create({
     flex: 0.3,
     alignItems: 'center'
   },
-  loginButton: {
+  loginContent: {
+    flexDirection: 'row',
     backgroundColor: '#43619D',
     justifyContent: 'center',
     height: 60,
     width: '80%'
   },
-  loginContent: {
-    flexDirection: 'row'
-  },
-  loginIcon: {
+  loginWrap: {
     flex: 0.15,
     justifyContent: 'center',
     alignItems: 'center'
   },
+  loginIcon: {
+    width: 30,
+    height: 30,
+  },
   loginLabel: {
-    flex: 0.85
+    flex: 0.85,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   loginText: {
     color: '#F1F5F6',
     textAlign: 'center',
     fontSize: 20,
-    fontFamily: 'ProximaNovaSoft-Medium',
+    fontFamily: 'ProximaNovaSoft-Regular',
     fontWeight: 'bold'
   },
   locationActionContainer: {
@@ -128,7 +144,7 @@ const styles = StyleSheet.create({
     color: '#F1F5F6',
     textAlign: 'center',
     fontSize: 20,
-    fontFamily: 'ProximaNovaSoft-Medium',
+    fontFamily: 'ProximaNovaSoft-Regular',
     fontWeight: 'bold'
   },
   visitedContainer: {
@@ -147,7 +163,7 @@ const styles = StyleSheet.create({
     color: '#FD482E',
     textAlign: 'center',
     fontSize: 20,
-    fontFamily: 'ProximaNovaSoft-Medium',
+    fontFamily: 'ProximaNovaSoft-Regular',
     fontWeight: 'bold'
   }
 })
