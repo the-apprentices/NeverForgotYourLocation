@@ -103,6 +103,7 @@ export default Helpers = {
     data.map((result, idx, location) => {
       let dataFriend = JSON.parse(location[idx][1])
       let friend = {
+        id: location[idx][0],
         coordinate: dataFriend.coordinate,
         title: dataFriend.placeName,
         subtitle: dataFriend.placeAddress,
@@ -114,6 +115,7 @@ export default Helpers = {
     let friendsListSorted = sortListByDate(friends)
     return friendsListSorted.map((data) => {
       return Object.assign({}, {
+        id: data.id,
         coordinate: data.coordinate,
         title: data.title,
         subtitle: data.subtitle,
