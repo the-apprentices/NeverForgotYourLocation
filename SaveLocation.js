@@ -5,7 +5,8 @@ import {
   Text,
   TextInput,
   Image,
-  TouchableOpacity,
+  Keyboard,
+  TouchableNativeFeedback,
   ToastAndroid,
   NetInfo
 } from 'react-native'
@@ -14,8 +15,8 @@ import Mapbox, { MapView } from './src/config/Mapbox'
 import Helpers from './src/helpers/handleData'
 
 const icons = {
-  user: require('./src/assets/imgs/user.png'),
-  place: require('./src/assets/imgs/placeholder.png')
+  place: require('./src/assets/imgs/favorite-place.png'),
+  flag: require('./src/assets/imgs/flag.png')
 }
 
 export default class SaveLocation extends Component {
@@ -40,7 +41,7 @@ export default class SaveLocation extends Component {
           longitude: position.coords.longitude
         }
       })
-      this.map.setCenterCoordinateZoomLevel(position.coords.latitude, position.coords.longitude, 15, animated = true)
+      this.map.setCenterCoordinateZoomLevel(position.coords.latitude, position.coords.longitude, 15)
     },
       (error) => ToastAndroid.show('Can not get your location', ToastAndroid.LONG)
     )
@@ -111,6 +112,7 @@ export default class SaveLocation extends Component {
         .then(() => {
           ToastAndroid.show('Save Location successfully!', ToastAndroid.LONG)
           setTimeout(() => {
+            Keyboard.dismiss()
             navigate('Home')
           }, 500)
         })
@@ -129,8 +131,8 @@ export default class SaveLocation extends Component {
         />
         <View style={styles.saveContainer}>
           <View style={styles.placeContainer}>
-            <View style={styles.placeIcon}>
-              <Image source={icons.user}></Image>
+            <View style={styles.placeWrap}>
+              <Image style={styles.placeIcon} source={icons.place}></Image>
             </View>
             <TextInput style={styles.placeText}
               placeholder="Place name"
@@ -145,8 +147,8 @@ export default class SaveLocation extends Component {
             <View style={styles.borderView}></View>
           </View>
           <View style={styles.placeContainer}>
-            <View style={styles.placeIcon}>
-              <Image source={icons.place}></Image>
+            <View style={styles.placeWrap}>
+              <Image style={styles.placeIcon} source={icons.flag}></Image>
             </View>
             <TextInput style={styles.placeText}
               placeholder="Place address"
@@ -158,12 +160,15 @@ export default class SaveLocation extends Component {
           </View>
         </View>
         <View style={styles.saveContent}>
-          <TouchableOpacity style={styles.saveButton}
-            onPress={() => this.onButtonSavePress(navigate)}>
-            <Text style={styles.saveText}>
-              SAVE
-             </Text>
-          </TouchableOpacity>
+          <TouchableNativeFeedback
+              onPress={() => this.onButtonSavePress(navigate)}
+              background={TouchableNativeFeedback.Ripple('#adadad', false)}>
+              <View style={styles.saveButton}>
+                <Text style={styles.saveText}>
+                  SAVE
+                </Text>
+              </View>
+            </TouchableNativeFeedback>
         </View>
       </View>
     )
@@ -187,10 +192,14 @@ const styles = StyleSheet.create({
   placeContainer: {
     flexDirection: 'row'
   },
-  placeIcon: {
+  placeWrap: {
     flex: 0.15,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  placeIcon: {
+    width: 30,
+    height: 30
   },
   placeText: {
     flex: 0.85,
