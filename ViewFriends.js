@@ -5,7 +5,7 @@ import {
   ListView,
   Text,
   Image,
-  TouchableHighlight
+  TouchableNativeFeedback
 } from 'react-native'
 import Spinner from 'react-native-spinkit'
 
@@ -48,6 +48,7 @@ class Friend extends Component {
     super(props)
   }
   static propTypes = {
+    id: PropTypes.string.isRequired,
     coordinate: PropTypes.object.isRequired,
     title: PropTypes.string.isRequired,
     subtitle: PropTypes.string.isRequired,
@@ -56,12 +57,15 @@ class Friend extends Component {
     onListViewElementSelected: PropTypes.func.isRequired
   }
   onRowPress() {
-    this.props.onListViewElementSelected(this.props.coordinate)
+    setTimeout(() => {
+      this.props.onListViewElementSelected(this.props.coordinate, this.props.id)
+    }, 10)
   }
   render() {
     return (
-      <TouchableHighlight underlayColor={'#00f9ff'}
-        onPress={() => this.onRowPress()}>
+      <TouchableNativeFeedback
+        onPress={() => this.onRowPress()}
+        background={TouchableNativeFeedback.Ripple('#adadad', false)}>
         <View style={styles.friendContainer}>
           <View style={styles.avatarContainer}>
             <View style={[styles.avatarContent, { backgroundColor: this.props.avatar.color }]}>
@@ -80,7 +84,7 @@ class Friend extends Component {
             <Text style={styles.dateFormat}>{this.props.createAt}</Text>
           </View>
         </View>
-      </TouchableHighlight>
+      </TouchableNativeFeedback>
     )
   }
 }
@@ -88,7 +92,7 @@ class Friend extends Component {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: '#ffffff'
+    backgroundColor: '#EEEEEE'
   },
   loadingContainer: {
     flex: 1,
@@ -108,7 +112,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#ffffff',
     padding: 5,
-    marginTop: 1,
+    marginTop: 1.5,
+    marginBottom: 1.5,
     borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: '#D7D8DA'
