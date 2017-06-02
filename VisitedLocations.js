@@ -19,12 +19,37 @@ const goToHome = NavigationActions.back({
   routeName: 'Home'
 })
 
+const icons = {
+  home: require('./src/assets/imgs/home.png'),
+  search: require('./src/assets/imgs/search.png')
+}
+
 const styles = StyleSheet.create({
   backButton: {
     flex: 1,
-    width: 60,
+    width: 55,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  backIcon: {
+    width: 30,
+    height: 30
+  },
+  searchWrap: {
+    flex: 1,
+    width: 55,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  searchButton: {
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  searchIcon: {
+    width: 25,
+    height: 25
   },
   mainContainer: {
     flex: 1
@@ -55,7 +80,8 @@ export default class VisitedLocations extends Component {
       rightButtonTextColor: '#FD482E',
       listFriendData: [],
       listAnnotationData: [],
-      coordinate: null
+      coordinate: null,
+      selectedAnnotationId: null,
     }
   }
   static navigationOptions = ({ navigation }) => {
@@ -65,16 +91,18 @@ export default class VisitedLocations extends Component {
         onPress={() => navigation.dispatch(goToHome)}
         background={TouchableNativeFeedback.Ripple('#adadad', true)}>
         <View style={styles.backButton}>
-          <Image source={require('./src/assets/imgs/home.png')} />
+          <Image style={styles.backIcon} source={icons.home} />
         </View>
       </TouchableNativeFeedback>,
-      headerRight: <TouchableNativeFeedback
-        onPress={() => navigation.dispatch(goToHome)}
-        background={TouchableNativeFeedback.Ripple('#adadad', true)}>
-        <View style={styles.backButton}>
-          <Image source={require('./src/assets/imgs/search.png')} />
-        </View>
-      </TouchableNativeFeedback>
+      headerRight: <View style={styles.searchWrap}>
+        <TouchableNativeFeedback
+          onPress={() => { }}
+          background={TouchableNativeFeedback.Ripple('#adadad', true)}>
+          <View style={styles.searchButton}>
+            <Image style={styles.searchIcon} source={icons.search} />
+          </View>
+        </TouchableNativeFeedback>
+      </View>
     }
   }
   changeLeftButtonState() {
@@ -109,8 +137,8 @@ export default class VisitedLocations extends Component {
       this.changeRightButtonState()
     }
   }
-  onListViewElementSelected(coordinate) {
-    this.setState({ coordinate })
+  onListViewElementSelected(coordinate, selectedAnnotationId) {
+    this.setState({ coordinate, selectedAnnotationId })
     this.changeButtonStateWhenClick(false)
   }
   getCurrentLocation() {
@@ -157,6 +185,7 @@ export default class VisitedLocations extends Component {
           </View>
           <View>
             <ViewLocations coordinate={this.state.coordinate}
+              selectedAnnotationId={this.state.selectedAnnotationId}
               annotations={this.state.listAnnotationData}
             />
           </View>
