@@ -86,7 +86,7 @@ export default class SaveLocation extends Component {
     let annotation = await Helpers.getNewAnnotation(uid)
     return annotation
   }
-  onButtonSavePress(navigate) {
+  onButtonSavePress(goBack) {
     if (!this.state.placeName) {
       ToastAndroid.showWithGravity('Please type your place name!',
         ToastAndroid.LONG, ToastAndroid.CENTER)
@@ -113,13 +113,13 @@ export default class SaveLocation extends Component {
           ToastAndroid.show('Save Location successfully!', ToastAndroid.LONG)
           setTimeout(() => {
             Keyboard.dismiss()
-            navigate('Home')
+            goBack()
           }, 500)
         })
     }
   }
   render() {
-    const { navigate } = this.props.navigation
+    const { goBack } = this.props.navigation
     return (
       <View style={styles.mainContainter}>
         <MapView style={styles.mapContainer}
@@ -161,7 +161,7 @@ export default class SaveLocation extends Component {
         </View>
         <View style={styles.saveContent}>
           <TouchableNativeFeedback
-              onPress={() => this.onButtonSavePress(navigate)}
+              onPress={() => this.onButtonSavePress(goBack)}
               background={TouchableNativeFeedback.Ripple('#adadad', false)}>
               <View style={styles.saveButton}>
                 <Text style={styles.saveText}>
