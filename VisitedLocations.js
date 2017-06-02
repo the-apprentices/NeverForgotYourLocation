@@ -8,16 +8,11 @@ import {
   ToastAndroid,
   TouchableNativeFeedback
 } from 'react-native'
-import { NavigationActions } from 'react-navigation'
 import Helpers from './src/helpers/handleData'
 
 import SwitchButton from './SwitchButton'
 import ViewFriends from './ViewFriends'
 import ViewLocations from './ViewLocations'
-
-const goToHome = NavigationActions.back({
-  routeName: 'Home'
-})
 
 const icons = {
   home: require('./src/assets/imgs/home.png'),
@@ -85,10 +80,11 @@ export default class VisitedLocations extends Component {
     }
   }
   static navigationOptions = ({ navigation }) => {
+    const { goBack } = navigation
     return {
       title: 'VISITED LOCATIONS',
       headerLeft: <TouchableNativeFeedback
-        onPress={() => navigation.dispatch(goToHome)}
+        onPress={() => goBack()}
         background={TouchableNativeFeedback.Ripple('#adadad', true)}>
         <View style={styles.backButton}>
           <Image style={styles.backIcon} source={icons.home} />
