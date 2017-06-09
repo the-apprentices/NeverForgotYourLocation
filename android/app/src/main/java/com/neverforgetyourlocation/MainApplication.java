@@ -1,4 +1,4 @@
-package com.neverforgotyourlocation;
+package com.neverforgetyourlocation;
 
 import android.app.Application;
 

@@ -12,7 +12,7 @@ import {
   View
 } from 'react-native';
 
-export default class NeverForgotYourLocation extends Component {
+export default class NeverForgetYourLocation extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -50,4 +50,4 @@ const styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('NeverForgotYourLocation', () => NeverForgotYourLocation);
+AppRegistry.registerComponent('NeverForgetYourLocation', () => NeverForgetYourLocation);

@@ -45,12 +45,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.neverforgotyourlocation",
+    package = "com.neverforgetyourlocation",
 )
 
 android_resource(
     name = "res",
-    package = "com.neverforgotyourlocation",
+    package = "com.neverforgetyourlocation",
     res = "src/main/res",
 )
 

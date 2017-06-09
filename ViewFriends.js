@@ -7,7 +7,7 @@ import {
   Image,
   TouchableNativeFeedback
 } from 'react-native'
-import Spinner from 'react-native-spinkit'
+// import Spinner from 'react-native-spinkit'
 
 export default class ViewFriends extends Component {
   constructor(props) {
@@ -21,9 +21,10 @@ export default class ViewFriends extends Component {
   render() {
     if (this.props.listFriendData.length === 0) {
       return (
-        <View style={styles.loadingContainer}>
-          <Spinner size={75} color={'#358ff4'} type={'ChasingDots'} />
-        </View>
+        // <View style={styles.loadingContainer}>
+          // <Spinner size={75} color={'#358ff4'} type={'ChasingDots'} />
+        // </View>
+        <View></View>
       )
     } else {
       return (

@@ -8,10 +8,10 @@ import HomeScreen from './HomeScreen'
 import SaveLocation from './SaveLocation'
 import VisitedLocations from './VisitedLocations'
 
-const NeverForgotYourLocation = StackNavigator({
+const NeverForgetYourLocation = StackNavigator({
   Home: { screen: HomeScreen },
   SaveLocation: { screen: SaveLocation },
   VisitedLocations: { screen: VisitedLocations }
 })
 
-AppRegistry.registerComponent('NeverForgotYourLocation', () => NeverForgotYourLocation)
+AppRegistry.registerComponent('NeverForgetYourLocation', () => NeverForgetYourLocation)
