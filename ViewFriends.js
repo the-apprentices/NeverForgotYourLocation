@@ -59,7 +59,7 @@ class Friend extends Component {
   }
   onRowPress() {
     setTimeout(() => {
-      this.props.onListViewElementSelected(this.props.coordinate, this.props.id)
+      this.props.onListViewElementSelected(this.props.coordinate)
     }, 10)
   }
   render() {
