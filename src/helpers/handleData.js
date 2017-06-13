@@ -7,7 +7,7 @@ const colours = ['#1abc9c', '#2ecc71', '#3498db', '#9b59b6', '#34495e',
   '#e67e22', '#e74c3c', '#ecf0f1', '#95a5a6', '#f39c12', '#d35400',
   '#c0392b', '#bdc3c7', '#7f8c8d']
 
-const accessToken = 'sk.eyJ1IjoiaGllcHZ2IiwiYSI6ImNqMXN5ZmJqNzAwMjMzMnJ6ZzR2d2huZWoifQ.LSja8rK5NJny2L0pGWLpfA'
+const accessToken = 'AIzaSyAu45A0xu8VooPpkYE_xEWOtQuUVGimqFE'
 
 clearAllData = async () => {
   await AsyncStorage.clear((err) => { })
@@ -67,34 +67,32 @@ export default Helpers = {
     await saveData(uid, dataToSave)
     return uid
   },
-  getNewAnnotation: async (uid) => {
+  getNewMarker: async (uid) => {
     let data = await getData(uid)
-    let dataAnnotation = JSON.parse(data)
-    let annotation = {
-      coordinates: Object.keys(dataAnnotation.coordinate).map(key => dataAnnotation.coordinate[key]),
-      type: 'point',
-      title: dataAnnotation.placeName,
-      subtitle: dataAnnotation.placeAddress,
+    let dataMarker = JSON.parse(data)
+    let marker = {
+      coordinate: dataMarker.coordinate,
+      title: dataMarker.placeName,
+      subtitle: dataMarker.placeAddress,
       id: uid
     }
-    return annotation
+    return marker
   },
-  getAllAnnotations: async () => {
+  getAllMarkers: async () => {
     let keys = await getAllKeys()
     let data = await getAllData(keys)
-    let annotations = []
+    let markers = []
     data.map((result, idx, location) => {
-      let dataAnnotation = JSON.parse(location[idx][1])
-      let annotation = {
-        coordinates: Object.keys(dataAnnotation.coordinate).map(key => dataAnnotation.coordinate[key]),
-        type: 'point',
-        title: dataAnnotation.placeName,
-        subtitle: dataAnnotation.placeAddress,
+      let dataMarker = JSON.parse(location[idx][1])
+      let marker = {
+        coordinate: dataMarker.coordinate,
+        title: dataMarker.placeName,
+        subtitle: dataMarker.placeAddress,
         id: location[idx][0]
       }
-      annotations.push(annotation)
+      markers.push(marker)
     })
-    return annotations
+    return markers
   },
   getAllFriends: async () => {
     let keys = await getAllKeys()
@@ -128,14 +126,11 @@ export default Helpers = {
     await clearAllData()
   },
   getAddress: async (coordinate) => {
-    let url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + coordinate.longitude
-      + ',' + coordinate.latitude + '.json?access_token=' + accessToken
+    let url = 'https://maps.googleapis.com/maps/api/geocode/json?key=' + accessToken
+      + '&latlng=' + coordinate.latitude + ',' + coordinate.longitude
     let response = await fetch(url)
     let responseJSON = await response.json()
-    let placeName = responseJSON.features[0].text
-    let placeAddress = (responseJSON.features[0].properties.address)? responseJSON.features[0].properties.address + ', ' : ''
-    responseJSON.features[0].context.map((location) => placeAddress = placeAddress + location.text + ', ')
-    placeAddress = placeAddress.substring(0, placeAddress.length - 2)
-    return {placeName, placeAddress}
+    let placeAddress = responseJSON.results[0].formatted_address
+    return { placeAddress }
   }
 }
