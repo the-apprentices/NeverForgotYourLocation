@@ -22,7 +22,7 @@ export default class MainScreen extends Component {
   }
   onButtonSavePress(navigate) {
     setTimeout(() => {
-      navigate('SaveLocation')
+      navigate('SaveLocation', { isSavingState: false })
     }, 100)
 
   }
