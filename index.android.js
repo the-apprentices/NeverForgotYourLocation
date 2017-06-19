@@ -4,7 +4,7 @@ import {
 } from 'react-native'
 import { StackNavigator } from 'react-navigation'
 
-import HomeScreen from './HomeScreen'
+import HomeScreen from './src/screens/HomeScreen'
 import SaveLocation from './SaveLocation'
 import VisitedLocations from './VisitedLocations'
 
