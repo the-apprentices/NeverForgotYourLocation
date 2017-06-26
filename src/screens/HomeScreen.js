@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import { StyleSheet, View, Image, ToastAndroid } from 'react-native'
 import {
-  StyleSheet,
-  View,
-  Image
-} from 'react-native'
+  signInWithFacebook,
+  getCurrentUser,
+  signOut
+} from '../helpers/handleFacebookAcount'
 import FacebookLoginButton from '../containers/LoginWithFacebook'
 import SaveButton from '../containers/DispatchSaveLocation'
 import ViewPlacesButton from '../containers/ViewPlaces'
@@ -13,19 +14,57 @@ const icons = {
 }
 
 export default class MainScreen extends Component {
+  constructor(props) {
+    super(props)
+    this.currentUser = null
+    this.state = {
+      buttonText: 'Loading ...'
+    }
+  }
   static navigationOptions = {
     header: null
   }
 
+  updateButtonInfo = async () => {
+    this.currentUser = await getCurrentUser()
+    const buttonText = this.currentUser ? `Hi, ${this.currentUser.displayName}`
+      : 'LOG IN WITH FACEBOOK'
+    this.setState({ buttonText })
+  }
+  onLoginAction = async () => {
+    this.setState({ buttonText: 'Loading ...' })
+    try {
+      await signInWithFacebook()
+      this.updateButtonInfo()
+    } catch (error) {
+      this.setState({ buttonText: 'LOG IN WITH FACEBOOK' })
+      ToastAndroid.show('Please check your connection!', ToastAndroid.LONG)
+    }
+  }
+  onLogoutAction = async () => {
+    this.setState({ buttonText: 'Loading ...' })
+    await signOut()
+    this.updateButtonInfo()
+  }
+  onLoginButtonPress() {
+    if (this.currentUser)
+      this.onLogoutAction()
+    else
+      this.onLoginAction()
+  }
   onSaveButtonPress(navigate) {
     setTimeout(() => {
-      navigate('SaveLocation', { isSavingState: false })
+      navigate('SaveLocation', { isSavingState: false, currentUser: this.currentUser })
     }, 100)
   }
   onViewButtonPress(navigate) {
     setTimeout(() => {
-      navigate('VisitedLocations')
+      navigate('VisitedLocations', { currentUser: this.currentUser })
     }, 100)
+  }
+
+  componentWillMount() {
+    this.updateButtonInfo()
   }
 
   render() {
@@ -36,7 +75,9 @@ export default class MainScreen extends Component {
           <Image source={icons.logo} />
         </View>
         <FacebookLoginButton
-          buttonWrapperStyle={styles.loginButtonWrapper} />
+          buttonWrapperStyle={styles.loginButtonWrapper}
+          buttonText={this.state.buttonText}
+          onButtonPress={() => this.onLoginButtonPress()} />
         <View style={styles.mainActionContainer}>
           <SaveButton
             buttonWrapperStyle={styles.saveButtonWrapper}

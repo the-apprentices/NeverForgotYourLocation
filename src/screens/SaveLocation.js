@@ -3,17 +3,16 @@ import {
   StyleSheet,
   View,
   Keyboard,
-  ToastAndroid,
-  NetInfo
+  ToastAndroid
 } from 'react-native'
 
-import BackButton from './src/components/BackButton'
-import DoneButton from './src/components/DoneButton'
-import MapView from './src/containers/MapView'
-import SaveButton from './src/containers/EnableSaveLocation'
-import HandleLocationInformation from './src/containers/HandleLocationInformation'
+import BackButton from '../components/BackButton'
+import DoneButton from '../components/DoneButton'
+import MapView from '../containers/MapView'
+import SaveButton from '../containers/EnableSaveLocation'
+import WrapLocationInformation from '../containers/WrapLocationInformation'
 
-import Helpers from './src/helpers/handleData'
+import * as Handler from '../helpers/handleDataWithFirebase'
 
 const DEFAULT_LATITUDE_DELTA = 0.005
 const DEFAULT_LONGITUDE_DELTA = 0.001
@@ -38,10 +37,11 @@ export default class SaveLocation extends Component {
   constructor(props) {
     super(props)
     this.watchID = null
+    this.currentUser = null
     this.state = {
       region: null,
       currentCoordinate: null,
-      listMakers: [],
+      listMarkers: [],
       placeName: '',
       placeAddress: '',
       saveContentDisplay: 'none',
@@ -91,7 +91,9 @@ export default class SaveLocation extends Component {
   onChangeLayoutWhenBackButtonClicked(setParams) {
     this.setState({
       saveContentDisplay: 'none',
-      saveButtonDisplay: 'flex'
+      saveButtonDisplay: 'flex',
+      placeAddress: '',
+      placeName: ''
     })
     Keyboard.dismiss()
     setParams({ isSavingState: false })
@@ -109,16 +111,10 @@ export default class SaveLocation extends Component {
     } else {
       let dataToSave = {
         coordinate: { longitude: this.state.currentCoordinate.longitude, latitude: this.state.currentCoordinate.latitude },
-        placeName: this.state.placeName,
-        placeAddress: this.state.placeAddress
+        title: this.state.placeName,
+        description: this.state.placeAddress
       }
       this.saveCurrentLocation(dataToSave)
-        .then((uid) => this.getNewMarker(uid))
-        .then((newMarker) => {
-          let listMakers = this.state.listMakers.concat()
-          listMakers.push(newMarker)
-          this.setState({ listMakers, placeName: null })
-        })
         .then(() => {
           ToastAndroid.show('Save Location successfully!', ToastAndroid.LONG)
           Keyboard.dismiss()
@@ -128,6 +124,9 @@ export default class SaveLocation extends Component {
   }
   onHandleConnectivityChange = (isConnected) => {
     if ((isConnected) && (this.state.currentCoordinate)) {
+      /**
+       * 
+       */
       Helpers.getAddress(this.state.currentCoordinate)
         .then(({ placeAddress }) => this.setState({
           placeAddress: placeAddress
@@ -135,17 +134,21 @@ export default class SaveLocation extends Component {
     }
   }
 
-  getNewMarker = async (uid) => {
-    let marker = await Helpers.getNewMarker(uid)
-    return marker
-  }
   getAllMarkers = async () => {
-    let markers = await Helpers.getAllMarkers()
-    return markers
+    let listMarkers = await Handler.getAllMarkerData(this.currentUser.uid)
+    this.setState({ listMarkers })
   }
   saveCurrentLocation = async (data) => {
-    let uid = await Helpers.saveCurrentLocation(data)
-    return uid
+    if (this.currentUser) Handler.saveMarkerData(this.currentUser.uid, data)
+    this.setState({
+      listMarkers: [
+        {
+          ...data,
+          key: `${data.coordinate.latitude}${data.coordinate.longitude}`
+        },
+        ...this.state.listMarkers
+      ]
+    })
   }
 
   componentWillMount() {
@@ -153,20 +156,8 @@ export default class SaveLocation extends Component {
   }
   componentDidMount() {
     this.getAllMarkers()
-      .then((listMakers) => this.setState({ listMakers }))
-    NetInfo.isConnected.addEventListener(
-      'change',
-      this.onHandleConnectivityChange
-    )
-    NetInfo.isConnected.fetch().done(
-      this.onHandleConnectivityChange
-    )
   }
   componentWillUnmount() {
-    NetInfo.isConnected.removeEventListener(
-      'change',
-      this.onHandleConnectivityChange
-    )
     navigator.geolocation.clearWatch(this.watchID)
   }
 
@@ -184,6 +175,10 @@ export default class SaveLocation extends Component {
       }))
   }
   onSaveButtonPress(setParams) {
+    Helpers.getAddress(this.state.currentCoordinate)
+      .then(({ placeAddress }) => this.setState({
+        placeAddress: placeAddress
+      }))
     this.onChangeLayoutWhenSaveButtonClicked()
     setParams({
       isSavingState: true,
@@ -194,16 +189,17 @@ export default class SaveLocation extends Component {
 
   render() {
     const { state, setParams } = this.props.navigation
+    this.currentUser = state.params.currentUser
     return (
       <View style={styles.mainContainer}>
         <MapView mapRef={mapView => { this.mapView = mapView }}
           region={this.state.region}
-          listMakers={this.state.listMakers}
+          listMarkers={this.state.listMarkers}
           isSavingState={state.params.isSavingState}
           onMapPress={this.onMapPress.bind(this)}
           currentCoordinate={this.state.currentCoordinate}
         />
-        <HandleLocationInformation
+        <WrapLocationInformation
           buttonWrapperStyle={{ display: this.state.saveContentDisplay }}
           placeName={this.state.placeName}
           onChangePlaceName={this.onChangePlaceName.bind(this)}
