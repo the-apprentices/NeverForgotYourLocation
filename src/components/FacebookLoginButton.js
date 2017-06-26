@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     fontFamily: 'ProximaNovaSoft-Regular',
-    fontWeight: 'bold'
+    fontWeight: 'normal'
   }
 })
 
@@ -50,6 +50,7 @@ export default class FacebookLoginButton extends Component {
     super(props)
   }
   static propTypes = {
+    buttonText: PropTypes.string.isRequired,
     onButtonPress: PropTypes.func.isRequired
   }
   onButtonPress() {
@@ -67,7 +68,7 @@ export default class FacebookLoginButton extends Component {
             </View>
             <View style={styles.buttonContentStyle}>
               <Text style={styles.buttonTextStyle}>
-                LOG IN WITH FACEBOOK
+                {this.props.buttonText}
               </Text>
             </View>
           </View>

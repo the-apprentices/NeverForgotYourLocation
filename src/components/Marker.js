@@ -17,16 +17,29 @@ export default class Marker extends Component {
         longitude: PropTypes.number.isRequired
       }).isRequired,
       title: PropTypes.string.isRequired,
-      subtitle: PropTypes.string.isRequired
-    }).isRequired
+      description: PropTypes.string.isRequired
+    }).isRequired,
+    markerSelected: PropTypes.bool
+  }
+
+  updateCallout() {
+    if (this.props.markerSelected) {
+      this.marker.showCallout()
+    } else {
+      this.marker.hideCallout()
+    }
+  }
+
+  componentDidUpdate() {
+    this.updateCallout()
   }
 
   render() {
     return (
-      <MapView.Marker
+      <MapView.Marker ref={marker => { this.marker = marker }}
         coordinate={this.props.marker.coordinate}
         image={icons.marker}>
-        <Callout marker={{ title: this.props.marker.title, subtitle: this.props.marker.subtitle }} />
+        <Callout marker={{ title: this.props.marker.title, subtitle: this.props.marker.description }} />
       </MapView.Marker>
     )
   }

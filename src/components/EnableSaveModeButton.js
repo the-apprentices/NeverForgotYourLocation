@@ -8,17 +8,14 @@ import {
 
 const styles = StyleSheet.create({
   buttonWrapperStyle: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
+    bottom: 10,
     alignItems: 'center',
     justifyContent: 'flex-end'
   },
   buttonContainerStyle: {
     height: 60,
-    minWidth: '100%',
+    width: '90%',
     backgroundColor: '#FD482E',
     justifyContent: 'center',
     alignItems: 'center'
@@ -28,7 +25,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     fontFamily: 'ProximaNovaSoft-Medium',
-    fontWeight: 'bold'
+    fontWeight: 'normal'
   }
 })
 

@@ -47,16 +47,17 @@ export default class LocationTextInput extends Component {
   render() {
     return (
       <View style={styles.placeContainer}>
-        <View style={styles.placeWrap}>
-          <Image style={styles.placeIcon} source={this.props.icon}></Image>
-        </View>
-        <TextInput style={styles.placeText}
-          placeholder={this.props.placeHolder}
-          onChangeText={(textInput) => this.onChangeText(textInput)}
-          multiline={false}
-          underlineColorAndroid={'transparent'}
-          value={this.props.textValue}
-        />
+          <View style={styles.placeWrap}>
+            <Image style={styles.placeIcon} source={this.props.icon}></Image>
+          </View>
+          <TextInput style={styles.placeText}
+            autoCapitalize='words'
+            placeholder={this.props.placeHolder}
+            onChangeText={(textInput) => this.onChangeText(textInput)}
+            multiline={false}
+            underlineColorAndroid={'transparent'}
+            value={this.props.textValue}
+          />
       </View>
     )
   }
