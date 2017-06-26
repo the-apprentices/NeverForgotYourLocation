@@ -11,6 +11,7 @@ const icons = {
 }
 const styles = StyleSheet.create({
   saveContentContainer: {
+    ...StyleSheet.absoluteFillObject,
     height: 120,
     flexDirection: 'column',
     justifyContent: 'center',
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export default class HandleLocationInformation extends Component {
+export default class WrapLocationInformation extends Component {
   constructor(props) {
     super(props)
   }
