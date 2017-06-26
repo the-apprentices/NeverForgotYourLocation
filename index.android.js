@@ -5,8 +5,8 @@ import {
 import { StackNavigator } from 'react-navigation'
 
 import HomeScreen from './src/screens/HomeScreen'
-import SaveLocation from './SaveLocation'
-import VisitedLocations from './VisitedLocations'
+import SaveLocation from './src/screens/SaveLocation'
+import VisitedLocations from './src/screens/VisitedLocations'
 
 const NeverForgetYourLocation = StackNavigator({
   Home: { screen: HomeScreen },
