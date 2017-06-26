@@ -8,10 +8,7 @@ import NewMarker from '../components/NewMarker'
 
 const styles = StyleSheet.create({
   mapContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
+    ...StyleSheet.absoluteFillObject,
     bottom: 1
   },
 })
@@ -29,20 +26,21 @@ export default class SaveLocation extends Component {
       latitudeDelta: PropTypes.number.isRequired,
       longitudeDelta: PropTypes.number.isRequired,
     }),
-    listMakers: PropTypes.arrayOf(PropTypes.shape({
+    listMarkers: PropTypes.arrayOf(PropTypes.shape({
       coordinate: PropTypes.shape({
         latitude: PropTypes.number.isRequired,
         longitude: PropTypes.number.isRequired
       }).isRequired,
       title: PropTypes.string.isRequired,
-      subtitle: PropTypes.string.isRequired
+      description: PropTypes.string.isRequired
     }).isRequired).isRequired,
-    isSavingState: PropTypes.bool,
+    isSavingState: PropTypes.bool.isRequired,
     onMapPress: PropTypes.func,
     currentCoordinate: PropTypes.shape({
       latitude: PropTypes.number.isRequired,
       longitude: PropTypes.number.isRequired
-    })
+    }),
+    keySelected: PropTypes.string
   }
 
   componentWillMount() {
@@ -70,8 +68,9 @@ export default class SaveLocation extends Component {
         toolbarEnabled={false}
         onPress={(e) => this.onMapPress(e)}>
         {newMarker}
-        {this.props.listMakers.map(marker => (
-          <Marker key={marker.id}
+        {this.props.listMarkers.map(marker => (
+          <Marker key={marker.key}
+            markerSelected={marker.key === this.props.keySelected}
             marker={marker} />
         ))}
       </MapView>
