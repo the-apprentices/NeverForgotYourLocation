@@ -36,23 +36,6 @@ twoNumberFormat = (numberFormat) => {
   if (numberFormat.length > 1) return numberFormat
   else return '0' + numberFormat
 }
-formatDateTime = (dateTime) => {
-  let getDateTime = new Date(dateTime)
-  let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  let month = months[getDateTime.getMonth()]
-  let date = twoNumberFormat(getDateTime.getDate().toString())
-  let hours = twoNumberFormat(getDateTime.getHours().toString())
-  let minutes = twoNumberFormat(getDateTime.getMinutes().toString())
-  return month + ' ' + date + ', ' + hours + ':' + minutes
-}
-getAvatarLetter = (name) => {
-  let color = colours[Math.floor(Math.random() * 19)]
-  let letter = name.charAt(0).toUpperCase()
-  return {
-    color: color,
-    letter: letter
-  }
-}
 
 export default Helpers = {
   saveCurrentLocation: async (data) => {
@@ -92,7 +75,8 @@ export default Helpers = {
       }
       markers.push(marker)
     })
-    return markers
+    console.warn(JSON.stringify(markers))
+    return []
   },
   getAllFriends: async () => {
     let keys = await getAllKeys()
@@ -132,5 +116,22 @@ export default Helpers = {
     let responseJSON = await response.json()
     let placeAddress = responseJSON.results[0].formatted_address
     return { placeAddress }
+  },
+  getAvatar: (name) => {
+    let color = colours[Math.floor(Math.random() * 19)]
+    let letter = name.charAt(0).toUpperCase()
+    return {
+      color: color,
+      letter: letter
+    }
+  },
+  formatDateTime: (dateTime) => {
+    let getDateTime = new Date(dateTime)
+    let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    let month = months[getDateTime.getMonth()]
+    let date = twoNumberFormat(getDateTime.getDate().toString())
+    let hours = twoNumberFormat(getDateTime.getHours().toString())
+    let minutes = twoNumberFormat(getDateTime.getMinutes().toString())
+    return month + ' ' + date + ', ' + hours + ':' + minutes
   }
 }
