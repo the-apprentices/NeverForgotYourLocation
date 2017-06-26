@@ -8,15 +8,18 @@ import {
   ToastAndroid,
   TouchableNativeFeedback
 } from 'react-native'
-import Helpers from './src/helpers/handleData'
 
-import SwitchButton from './SwitchButton'
-import ViewFriends from './ViewFriends'
-import ViewLocations from './ViewLocations'
+import SwitchButton from '../components/SwitchButton'
+import FriendsListView from '../components/FriendsListView'
+import ViewLocations from '../containers/ViewLocations'
+
+import * as Handler from '../helpers/handleDataWithFirebase'
 
 const icons = {
-  search: require('./src/assets/imgs/search.png')
+  search: require('../assets/imgs/search.png')
 }
+const DEFAULT_LATITUDE_DELTA = 0.005
+const DEFAULT_LONGITUDE_DELTA = 0.001
 
 export default class VisitedLocations extends Component {
   constructor(props) {
@@ -28,9 +31,9 @@ export default class VisitedLocations extends Component {
       rightButtonBackgroundColor: '#D7D8DA',
       leftButtonTextColor: '#ffffff',
       rightButtonTextColor: '#FD482E',
-      listFriendData: [],
-      listMarkerData: [],
-      coordinate: null
+      listMarkers: [],
+      region: null,
+      keySelected: ''
     }
   }
   static navigationOptions = ({ navigation }) => {
@@ -79,16 +82,19 @@ export default class VisitedLocations extends Component {
       this.changeRightButtonState()
     }
   }
-  onListViewElementSelected(coordinate) {
-    this.setState({ coordinate })
+  onListViewElementSelected(coordinate, keySelected) {
+    this.mapView.animateToCoordinate(coordinate)
     this.changeLeftButtonStateWhenClick(false)
+    this.setState({ keySelected })
   }
   getCurrentLocation() {
     navigator.geolocation.getCurrentPosition((position) => {
       this.setState({
-        coordinate: {
+        region: {
           latitude: position.coords.latitude,
-          longitude: position.coords.longitude
+          longitude: position.coords.longitude,
+          latitudeDelta: DEFAULT_LATITUDE_DELTA,
+          longitudeDelta: DEFAULT_LONGITUDE_DELTA
         }
       })
     },
@@ -96,29 +102,33 @@ export default class VisitedLocations extends Component {
     )
     this.watchID = navigator.geolocation.watchPosition((position) => {
       this.setState({
-        coordinate: {
+        region: {
           latitude: position.coords.latitude,
-          longitude: position.coords.longitude
+          longitude: position.coords.longitude,
+          latitudeDelta: DEFAULT_LATITUDE_DELTA,
+          longitudeDelta: DEFAULT_LONGITUDE_DELTA
         }
       })
     })
   }
-  getFriendData = async () => {
-    let friends = await Helpers.getAllFriends()
-    return friends
-  }
   getAllMarkers = async () => {
-    let markers = await Helpers.getAllMarkers()
-    return markers
+    let listMarkers = await Handler.getAllMarkerData(this.currentUser.uid)
+    this.setState({ listMarkers })
+  }
+
+  componentWillMount() {
+    this.getCurrentLocation()
   }
   componentDidMount() {
-    this.getCurrentLocation()
-    this.getFriendData()
-      .then((listFriendData) => this.setState({ listFriendData }))
     this.getAllMarkers()
-      .then((listMarkerData) => this.setState({ listMarkerData }))
   }
+  componentWillUnmount() {
+    navigator.geolocation.clearWatch(this.watchID)
+  }
+
   render() {
+    const { state } = this.props.navigation
+    this.currentUser = state.params.currentUser
     return (
       <View style={styles.mainContainer}>
         <ViewPagerAndroid style={styles.viewPagerContainer}
@@ -126,13 +136,15 @@ export default class VisitedLocations extends Component {
           initialPage={this.leftPageState}
           onPageSelected={this.onPageSelected}>
           <View>
-            <ViewFriends listFriendData={this.state.listFriendData}
+            <FriendsListView friendsList={this.state.listMarkers}
               onListViewElementSelected={this.onListViewElementSelected.bind(this)}
             />
           </View>
           <View>
-            <ViewLocations coordinate={this.state.coordinate}
-              markers={this.state.listMarkerData}
+            <ViewLocations mapRef={mapView => { this.mapView = mapView }}
+              region={this.state.region}
+              listMarkers={this.state.listMarkers}
+              keySelected={this.state.keySelected}
             />
           </View>
         </ViewPagerAndroid>
