@@ -22,7 +22,13 @@ export default class FriendsListView extends Component {
       description: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired
     }).isRequired).isRequired,
-    onListViewElementSelected: PropTypes.func.isRequired
+    keyItemLongPressState: PropTypes.string.isRequired,
+    onChangeLongPressState: PropTypes.func.isRequired,
+    onListViewElementSelected: PropTypes.func.isRequired,
+    setParams: PropTypes.func.isRequired,
+    onDeleteButtonPress: PropTypes.func.isRequired,
+    onEditButtonPress: PropTypes.func.isRequired
+
   }
   render() {
     return (
@@ -34,7 +40,12 @@ export default class FriendsListView extends Component {
             <FriendItem
               {...data}
               id={data.key}
+              keyItemLongPressState={this.props.keyItemLongPressState}
+              onChangeLongPressState={this.props.onChangeLongPressState}
               onListViewElementSelected={this.props.onListViewElementSelected}
+              setParams={this.props.setParams}
+              onDeleteButtonPress={this.props.onDeleteButtonPress}
+              onEditButtonPress={this.props.onEditButtonPress}
             />}
         />
       </View>
