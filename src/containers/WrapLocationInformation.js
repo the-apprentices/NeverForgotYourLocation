@@ -11,7 +11,6 @@ const icons = {
 }
 const styles = StyleSheet.create({
   saveContentContainer: {
-    ...StyleSheet.absoluteFillObject,
     height: 120,
     flexDirection: 'column',
     justifyContent: 'center',
@@ -37,7 +36,7 @@ export default class WrapLocationInformation extends Component {
     super(props)
   }
   static propTypes = {
-    buttonWrapperStyle: PropTypes.object.isRequired,
+    buttonWrapperStyle: PropTypes.object,
     placeName: PropTypes.string.isRequired,
     onChangePlaceName: PropTypes.func.isRequired,
     placeAddress: PropTypes.string.isRequired,
