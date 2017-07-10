@@ -17,17 +17,39 @@ export default class FriendItem extends Component {
     createAt: PropTypes.number.isRequired,
     description: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    onListViewElementSelected: PropTypes.func.isRequired
+    keyItemLongPressState: PropTypes.string.isRequired,
+    onChangeLongPressState: PropTypes.func.isRequired,
+    onListViewElementSelected: PropTypes.func.isRequired,
+    setParams: PropTypes.func.isRequired,
+    onDeleteButtonPress: PropTypes.func.isRequired,
+    onEditButtonPress: PropTypes.func.isRequired
   }
   onRowPress() {
     setTimeout(() => this.props.onListViewElementSelected(this.props.coordinate, this.props.id), 10)
+    this.props.onChangeLongPressState('')
+    this.props.setParams({ isLongPressState: false })
+  }
+  onLongPress() {
+    this.onChangeLongPressState()
+  }
+  onChangeLongPressState() {
+    this.props.onChangeLongPressState(this.props.id)
+    this.props.setParams({
+      isLongPressState: true,
+      onDeleteButtonPress: this.props.onDeleteButtonPress,
+      onEditButtonPress: this.props.onEditButtonPress,
+      markerKey: this.props.id
+    })
   }
   render() {
+    const backgroundColorWhenSelected = (this.props.keyItemLongPressState === this.props.id) ?
+      '#adadad' : '#ffffff'
     return (
       <TouchableNativeFeedback
         onPress={() => this.onRowPress()}
+        onLongPress={() => this.onLongPress()}
         background={TouchableNativeFeedback.Ripple('#adadad', false)}>
-        <View style={styles.friendContainer}>
+        <View style={[styles.friendContainer, { backgroundColor: backgroundColorWhenSelected }]}>
           <View style={styles.avatarContainer}>
             <View style={[styles.avatarContent, { backgroundColor: this.avatarFormat.color }]}>
               <Text style={styles.avatarLetter}>{this.avatarFormat.letter}</Text>
