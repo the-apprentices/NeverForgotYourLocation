@@ -36,6 +36,7 @@ export default class ViewLocations extends Component {
           listMarkers={this.props.listMarkers}
           keySelected={this.props.keySelected}
           isSavingState={false}
+          showsMyLocationButton={true}
         />
       </View>
     )
