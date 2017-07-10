@@ -93,7 +93,11 @@ export default class SaveLocation extends Component {
       saveContentDisplay: 'none',
       saveButtonDisplay: 'flex',
       placeAddress: '',
-      placeName: ''
+      placeName: '',
+      currentCoordinate: {
+        latitude: this.state.region.latitude,
+        longitude: this.state.region.longitude
+      }
     })
     Keyboard.dismiss()
     setParams({ isSavingState: false })
@@ -198,6 +202,7 @@ export default class SaveLocation extends Component {
           isSavingState={state.params.isSavingState}
           onMapPress={this.onMapPress.bind(this)}
           currentCoordinate={this.state.currentCoordinate}
+          showsMyLocationButton={true}
         />
         <WrapLocationInformation
           buttonWrapperStyle={{ display: this.state.saveContentDisplay }}
