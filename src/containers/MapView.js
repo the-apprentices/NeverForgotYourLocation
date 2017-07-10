@@ -19,7 +19,7 @@ export default class SaveLocation extends Component {
     this.state = { bottom: 1 }
   }
   static propTypes = {
-    mapRef: PropTypes.func.isRequired,
+    mapRef: PropTypes.func,
     region: PropTypes.shape({
       latitude: PropTypes.number.isRequired,
       longitude: PropTypes.number.isRequired,
@@ -40,7 +40,10 @@ export default class SaveLocation extends Component {
       latitude: PropTypes.number.isRequired,
       longitude: PropTypes.number.isRequired
     }),
-    keySelected: PropTypes.string
+    keySelected: PropTypes.string,
+    zoomEnabled: PropTypes.bool,
+    scrollEnabled: PropTypes.bool,
+    showsMyLocationButton: PropTypes.bool.isRequired
   }
 
   componentWillMount() {
@@ -63,7 +66,9 @@ export default class SaveLocation extends Component {
         mapType={MAP_TYPES.STANDARD}
         style={[styles.mapContainer, { bottom: this.state.bottom }]}
         showsUserLocation={true}
-        showsMyLocationButton={true}
+        showsMyLocationButton={this.props.showsMyLocationButton}
+        zoomEnabled={this.props.zoomEnabled}
+        scrollEnabled={this.props.scrollEnabled}
         initialRegion={this.props.region}
         toolbarEnabled={false}
         onPress={(e) => this.onMapPress(e)}>
