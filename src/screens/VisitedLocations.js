@@ -6,17 +6,21 @@ import {
   Image,
   Text,
   ToastAndroid,
+  Alert,
   TouchableNativeFeedback
 } from 'react-native'
 
 import SwitchButton from '../components/SwitchButton'
 import FriendsListView from '../components/FriendsListView'
 import ViewLocations from '../containers/ViewLocations'
+import BackButton from '../components/BackButton'
 
 import * as Handler from '../helpers/handleDataWithFirebase'
 
 const icons = {
-  search: require('../assets/imgs/search.png')
+  search: require('../assets/imgs/search.png'),
+  recycleBin: require('../assets/imgs/recycle-bin.png'),
+  edit: require('../assets/imgs/pencil.png')
 }
 const DEFAULT_LATITUDE_DELTA = 0.005
 const DEFAULT_LONGITUDE_DELTA = 0.001
@@ -33,21 +37,61 @@ export default class VisitedLocations extends Component {
       rightButtonTextColor: '#FD482E',
       listMarkers: [],
       region: null,
-      keySelected: ''
+      keySelected: '',
+      keyItemLongPressState: ''
     }
   }
   static navigationOptions = ({ navigation }) => {
-    return {
-      title: 'VISITED LOCATIONS',
-      headerRight: <View style={styles.searchWrap}>
-        <TouchableNativeFeedback
-          onPress={() => { }}
-          background={TouchableNativeFeedback.Ripple('#adadad', true)}>
-          <View style={styles.searchButton}>
-            <Image style={styles.searchIcon} source={icons.search} />
-          </View>
-        </TouchableNativeFeedback>
-      </View>
+    const { state, setParams, navigate } = navigation
+    if (!state.params.isLongPressState)
+      return {
+        title: 'VISITED LOCATIONS',
+        headerRight: <View style={styles.searchWrap}>
+          <TouchableNativeFeedback
+            onPress={() => { }}
+            background={TouchableNativeFeedback.Ripple('#adadad', true)}>
+            <View style={styles.searchButton}>
+              <Image style={styles.iconSize} source={icons.search} />
+            </View>
+          </TouchableNativeFeedback>
+        </View>
+      }
+    else {
+      return {
+        title: '1 selected',
+        headerStyle: { backgroundColor: '#1e8ef6' },
+        headerRight: <View style={styles.editWrap}>
+          <TouchableNativeFeedback
+            onPress={() => state.params.onEditButtonPress(navigate, state.params.markerKey)}
+            background={TouchableNativeFeedback.Ripple('#adadad', true)}>
+            <View style={styles.editButton}>
+              <Image style={styles.iconSize} source={icons.edit} />
+            </View>
+          </TouchableNativeFeedback>
+          <TouchableNativeFeedback
+            onPress={() => Alert.alert(
+              'Delete this location',
+              'Are you sure?',
+              [
+                { text: 'Cancel', onPress: () => ToastAndroid.show('Cancelled!', ToastAndroid.SHORT) },
+                {
+                  text: 'OK', onPress: () => {
+                    state.params.onDeleteButtonPress(state.params.markerKey)
+                    setTimeout(() => ToastAndroid.show('Deleted!', ToastAndroid.SHORT), 500)
+                    setParams({ isLongPressState: false })
+                  }
+                }
+              ],
+              { cancelable: false }
+            )
+            }
+            background={TouchableNativeFeedback.Ripple('#adadad', true)}>
+            <View style={styles.deleteButton}>
+              <Image style={styles.iconSize} source={icons.recycleBin} />
+            </View>
+          </TouchableNativeFeedback>
+        </View>
+      }
     }
   }
   changeLeftButtonState() {
@@ -115,6 +159,23 @@ export default class VisitedLocations extends Component {
     let listMarkers = await Handler.getAllMarkerData(this.currentUser.uid)
     this.setState({ listMarkers })
   }
+  onChangeLongPressState(keyItemLongPressState) {
+    this.setState({ keyItemLongPressState })
+  }
+  onDeleteButtonPress(markerKey) {
+    let newListMarkers = this.state.listMarkers.filter(marker => marker.key != markerKey)
+    this.setState({ listMarkers: newListMarkers })
+    Handler.deleteMarker(this.currentUser.uid, markerKey)
+  }
+  onEditButtonPress(navigate, markerKey) {
+    let marker = this.state.listMarkers.filter(marker => marker.key === markerKey)
+    setTimeout(() => {
+      navigate('EditLocation', { placeData: marker[0], onDoneButtonPress: this.onDoneButtonPress.bind(this) })
+    }, 100)
+  }
+  onDoneButtonPress(markerKey, title, description) {
+    Handler.updateMarkerInfo(this.currentUser.uid, markerKey, title, description)
+  }
 
   componentWillMount() {
     this.getCurrentLocation()
@@ -127,7 +188,7 @@ export default class VisitedLocations extends Component {
   }
 
   render() {
-    const { state } = this.props.navigation
+    const { state, setParams } = this.props.navigation
     this.currentUser = state.params.currentUser
     return (
       <View style={styles.mainContainer}>
@@ -137,7 +198,12 @@ export default class VisitedLocations extends Component {
           onPageSelected={this.onPageSelected}>
           <View>
             <FriendsListView friendsList={this.state.listMarkers}
+              keyItemLongPressState={this.state.keyItemLongPressState}
+              onChangeLongPressState={this.onChangeLongPressState.bind(this)}
               onListViewElementSelected={this.onListViewElementSelected.bind(this)}
+              setParams={setParams}
+              onDeleteButtonPress={this.onDeleteButtonPress.bind(this)}
+              onEditButtonPress={this.onEditButtonPress.bind(this)}
             />
           </View>
           <View>
@@ -175,9 +241,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  searchIcon: {
+  iconSize: {
     width: 25,
     height: 25
+  },
+  editWrap: {
+    flex: 1,
+    flexDirection: 'row',
+    width: 110,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  editButton: {
+    width: 40,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  deleteButton: {
+    width: 40,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   mainContainer: {
     flex: 1
