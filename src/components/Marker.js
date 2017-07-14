@@ -38,7 +38,8 @@ export default class Marker extends Component {
     return (
       <MapView.Marker ref={marker => { this.marker = marker }}
         coordinate={this.props.marker.coordinate}
-        image={icons.marker}>
+        //image={icons.marker}
+        >
         <Callout marker={{ title: this.props.marker.title, subtitle: this.props.marker.description }} />
       </MapView.Marker>
     )

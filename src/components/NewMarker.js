@@ -25,7 +25,7 @@ export default class NewMarker extends Component {
       <MapView.Marker
         coordinate={this.props.currentCoordinate}
         onDragEnd={(e) => this.onDragMarker(e)}
-        image={icons.marker}
+         //image={icons.marker} 
         draggable
       />
     )
