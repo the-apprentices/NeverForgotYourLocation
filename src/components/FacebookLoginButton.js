@@ -1,16 +1,12 @@
-import React, { Component, PropTypes } from 'react'
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  TouchableNativeFeedback
-} from 'react-native'
-
-
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { StyleSheet, View, Text, Image, TouchableNativeFeedback } from 'react-native'
+import { loadingState, signInWithFacebook, signOutWithFacebook } from '../actions'
 const icons = {
   facebook: require('../assets/imgs/facebook.png')
 }
+
 const styles = StyleSheet.create({
   buttonWrapperStyle: {
     alignItems: 'center'
@@ -44,36 +40,45 @@ const styles = StyleSheet.create({
     fontWeight: 'normal'
   }
 })
-
-export default class FacebookLoginButton extends Component {
-  constructor(props) {
-    super(props)
-  }
-  static propTypes = {
-    buttonText: PropTypes.string.isRequired,
-    onButtonPress: PropTypes.func.isRequired
-  }
-  onButtonPress() {
-    this.props.onButtonPress()
-  }
-  render() {
-    return (
-      <View style={[styles.buttonWrapperStyle, this.props.buttonWrapperStyle]}>
-        <TouchableNativeFeedback
-          onPress={() => this.onButtonPress()}
-          background={TouchableNativeFeedback.Ripple('#adadad', false)}>
-          <View style={styles.buttonContainerStyle}>
-            <View style={styles.iconContainer}>
-              <Image style={styles.iconContent} source={icons.facebook} />
-            </View>
-            <View style={styles.buttonContentStyle}>
-              <Text style={styles.buttonTextStyle}>
-                {this.props.buttonText}
-              </Text>
-            </View>
-          </View>
-        </TouchableNativeFeedback>
-      </View>
-    )
+const onButtonPress = (auth, dispatch) => {
+  if (auth)
+    dispatch(signOutWithFacebook())
+  else {
+    dispatch(loadingState())
+    dispatch(signInWithFacebook())
   }
 }
+const FacebookLoginButton = ({ style, auth, dispatch }) => {
+  let buttonText
+  if (auth.isLoading) buttonText = 'Loading ...'
+  else if (auth.auth) buttonText = `Hi, ${auth.auth.displayName}`
+  else buttonText = 'SIGN IN WITH FACEBOOK'
+  return (
+    <View style={[styles.buttonWrapperStyle, style]}>
+      <TouchableNativeFeedback
+        onPress={() => onButtonPress(auth.auth, dispatch)}
+        background={TouchableNativeFeedback.Ripple('#adadad', false)}>
+        <View style={styles.buttonContainerStyle}>
+          <View style={styles.iconContainer}>
+            <Image style={styles.iconContent} source={icons.facebook} />
+          </View>
+          <View style={styles.buttonContentStyle}>
+            <Text style={styles.buttonTextStyle}>
+              {buttonText}
+            </Text>
+          </View>
+        </View>
+      </TouchableNativeFeedback>
+    </View>
+  )
+}
+FacebookLoginButton.propTypes = {
+  style: PropTypes.number.isRequired,
+  auth: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired
+}
+const mapStateToProps = state => ({
+  auth: state.auth
+})
+
+export default connect(mapStateToProps)(FacebookLoginButton)
