@@ -1,0 +1,5 @@
+export const LOADING = 'LOADING'
+export const RECEIVE_LOCATIONS = 'RECEIVE_LOCATIONS'
+export const ADD_LOCATION = 'ADD_LOCATION'
+export const SIGN_IN = 'SIGN_IN'
+export const SIGN_OUT = 'SIGN_OUT'
