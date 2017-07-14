@@ -1,19 +1,31 @@
 import React, { Component } from 'react'
-import {
-  AppRegistry
-} from 'react-native'
-import { StackNavigator } from 'react-navigation'
+import { createStore, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
+import reducer from './src/reducers'
+import { getCurrentAuth } from './src/actions'
+import thunk from 'redux-thunk'
+import { createLogger } from 'redux-logger'
+import { AppRegistry } from 'react-native'
+import AppNavigator from './src/navigators/AppNavigator'
 
-import HomeScreen from './src/screens/HomeScreen'
-import SaveLocation from './src/screens/SaveLocation'
-import VisitedLocations from './src/screens/VisitedLocations'
-import EditLocation from './src/screens/EditLocation'
+const middleware = [thunk]
+if (process.env.NODE_ENV !== 'production') {
+  middleware.push(createLogger())
+}
+const store = createStore(
+  reducer,
+  applyMiddleware(...middleware)
+)
+store.dispatch(getCurrentAuth())
 
-const NeverForgetYourLocation = StackNavigator({
-  Home: { screen: HomeScreen },
-  SaveLocation: { screen: SaveLocation },
-  VisitedLocations: { screen: VisitedLocations },
-  EditLocation: { screen: EditLocation}
-})
+export default class NeverForgetYourLocation extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <AppNavigator />
+      </Provider>
+    )
+  }
+}
 
 AppRegistry.registerComponent('NeverForgetYourLocation', () => NeverForgetYourLocation)
