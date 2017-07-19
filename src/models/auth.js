@@ -6,9 +6,9 @@ const {
   AccessToken
 } = FBSDK
 
-export const getCurrentAuth = async (callback) => {
+export const getCurrentAuth = (callback) => {
   try {
-    let auth = new Promise(() => {
+    new Promise(() => {
       firebase.auth().onAuthStateChanged((auth) => {
         callback(auth)
       })
