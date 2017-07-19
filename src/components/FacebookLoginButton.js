@@ -1,12 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import { StyleSheet, View, Text, Image, TouchableNativeFeedback } from 'react-native'
-import { loadingState, signInWithFacebook, signOutWithFacebook } from '../actions'
+import { loadingAuthState, signInWithFacebook, signOutWithFacebook } from '../actions'
 const icons = {
   facebook: require('../assets/imgs/facebook.png')
 }
-
 const styles = StyleSheet.create({
   buttonWrapperStyle: {
     alignItems: 'center'
@@ -40,11 +38,12 @@ const styles = StyleSheet.create({
     fontWeight: 'normal'
   }
 })
+
 const onButtonPress = (auth, dispatch) => {
   if (auth)
     dispatch(signOutWithFacebook())
   else {
-    dispatch(loadingState())
+    dispatch(loadingAuthState())
     dispatch(signInWithFacebook())
   }
 }
@@ -77,8 +76,5 @@ FacebookLoginButton.propTypes = {
   auth: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
 }
-const mapStateToProps = state => ({
-  auth: state.auth
-})
 
-export default connect(mapStateToProps)(FacebookLoginButton)
+export default FacebookLoginButton
