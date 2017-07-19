@@ -10,7 +10,7 @@ export default class NewMarker extends Component {
     super(props)
   }
   static propTypes = {
-    currentCoordinate: PropTypes.shape({
+    targetCoordinate: PropTypes.shape({
       latitude: PropTypes.number.isRequired,
       longitude: PropTypes.number.isRequired
     }).isRequired,
@@ -23,7 +23,7 @@ export default class NewMarker extends Component {
   render() {
     return (
       <MapView.Marker
-        coordinate={this.props.currentCoordinate}
+        coordinate={this.props.targetCoordinate}
         onDragEnd={(e) => this.onDragMarker(e)}
          //image={icons.marker} 
         draggable
