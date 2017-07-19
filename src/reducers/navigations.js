@@ -15,6 +15,22 @@ function nav(state = initialNavState, action) {
         state
       )
       break
+    case 'SaveLocation':
+      nextState = AppNavigator.router.getStateForAction(
+        NavigationActions.navigate({
+          routeName: 'SaveLocation',
+          params: {
+            isSavingMode: false,
+            displayWrapperInfor: 'none',
+            displaySaveButton: 'flex',
+            targetCoordinate: null,
+            placeName: '',
+            placeAddress: ''
+          }
+        }),
+        state
+      )
+      break
     default:
       nextState = AppNavigator.router.getStateForAction(action, state)
       break
