@@ -10,7 +10,7 @@ import EditLocation from '../screens/EditLocation'
 
 export const AppNavigator = StackNavigator({
   Home: { screen: HomeScreen },
-  // SaveLocation: { screen: SaveLocation },
+  SaveLocation: { screen: SaveLocation },
   // VisitedLocations: { screen: VisitedLocations },
   // EditLocation: { screen: EditLocation }
 })
