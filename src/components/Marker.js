@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import MapView from 'react-native-maps'
 import Callout from './Callout'
-
 const icons = {
   marker: require('../assets/imgs/marker-point.png')
 }
@@ -21,7 +20,6 @@ export default class Marker extends Component {
     }).isRequired,
     markerSelected: PropTypes.bool
   }
-
   updateCallout() {
     if (this.props.markerSelected) {
       this.marker.showCallout()
@@ -29,11 +27,9 @@ export default class Marker extends Component {
       this.marker.hideCallout()
     }
   }
-
   componentDidUpdate() {
     this.updateCallout()
   }
-
   render() {
     return (
       <MapView.Marker ref={marker => { this.marker = marker }}

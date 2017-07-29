@@ -1,12 +1,7 @@
-import React, { Component, PropTypes } from 'react'
-import {
-  StyleSheet,
-  View,
-  Text,
-  Dimensions
-} from 'react-native'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { StyleSheet, View, Text, Dimensions } from 'react-native'
 import MapView from 'react-native-maps'
-
 const { width } = Dimensions.get('window')
 const styles = StyleSheet.create({
   mapCallout: {
@@ -34,25 +29,17 @@ const styles = StyleSheet.create({
   },
 })
 
-export default class Callout extends Component {
-  constructor(props) {
-    super(props)
-  }
-  static propTypes = {
-    marker: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      subtitle: PropTypes.string.isRequired
-    }).isRequired
-  }
-
-  render() {
-    return (
-      <MapView.Callout tooltip style={styles.mapCallout}>
-        <View style={styles.calloutWrap}>
-          <Text style={styles.markerTitle}>{this.props.marker.title}</Text>
-          <Text style={styles.markerDescription}>{this.props.marker.subtitle}</Text>
-        </View>
-      </MapView.Callout>
-    )
-  }
+export default Callout = ({ marker }) => (
+  <MapView.Callout tooltip style={styles.mapCallout}>
+    <View style={styles.calloutWrap}>
+      <Text style={styles.markerTitle}>{marker.title}</Text>
+      <Text style={styles.markerDescription}>{marker.subtitle}</Text>
+    </View>
+  </MapView.Callout>
+)
+Callout.propTypes = {
+  marker: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    subtitle: PropTypes.string.isRequired
+  }).isRequired
 }

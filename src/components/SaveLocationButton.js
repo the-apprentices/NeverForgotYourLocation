@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   }
 })
 
-const SaveButton = ({ style, navigation }) => (
+export default SaveButton = ({ style, navigation }) => (
   <View style={[styles.buttonWrapperStyle, style]}>
     <TouchableNativeFeedback
       onPress={() => navigation.dispatch({ type: 'SaveLocation' })}
@@ -40,4 +40,3 @@ SaveButton.propTypes = {
   style: PropTypes.number.isRequired,
   navigation: PropTypes.object.isRequired
 }
-export default SaveButton
