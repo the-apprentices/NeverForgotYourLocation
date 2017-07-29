@@ -1,58 +1,6 @@
 import React, { Component, PropTypes } from 'react'
-import {
-  StyleSheet,
-  View,
-  ListView
-} from 'react-native'
+import { StyleSheet, View, ListView } from 'react-native'
 import FriendItem from './FriendItem'
-
-export default class FriendsListView extends Component {
-  constructor(props) {
-    super(props)
-    this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 != r2 })
-  }
-  static propTypes = {
-    friendsList: PropTypes.arrayOf(PropTypes.shape({
-      key: PropTypes.string.isRequired,
-      coordinate: PropTypes.shape({
-        latitude: PropTypes.number.isRequired,
-        longitude: PropTypes.number.isRequired
-      }).isRequired,
-      createAt: PropTypes.number.isRequired,
-      description: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired
-    }).isRequired).isRequired,
-    keyItemLongPressState: PropTypes.string.isRequired,
-    onChangeLongPressState: PropTypes.func.isRequired,
-    onListViewElementSelected: PropTypes.func.isRequired,
-    setParams: PropTypes.func.isRequired,
-    onDeleteButtonPress: PropTypes.func.isRequired,
-    onEditButtonPress: PropTypes.func.isRequired
-
-  }
-  render() {
-    return (
-      <View style={styles.mainContainer}>
-        <ListView style={styles.friendsList}
-          enableEmptySections={true}
-          dataSource={this.ds.cloneWithRows(this.props.friendsList)}
-          renderRow={(data) =>
-            <FriendItem
-              {...data}
-              id={data.key}
-              keyItemLongPressState={this.props.keyItemLongPressState}
-              onChangeLongPressState={this.props.onChangeLongPressState}
-              onListViewElementSelected={this.props.onListViewElementSelected}
-              setParams={this.props.setParams}
-              onDeleteButtonPress={this.props.onDeleteButtonPress}
-              onEditButtonPress={this.props.onEditButtonPress}
-            />}
-        />
-      </View>
-    )
-  }
-}
-
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
@@ -73,3 +21,38 @@ const styles = StyleSheet.create({
     flex: 0.5
   }
 })
+
+export default class FriendsListView extends Component {
+  constructor(props) {
+    super(props)
+    this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 != r2 })
+  }
+  render() {
+    return (
+      <View style={styles.mainContainer}>
+        <ListView style={styles.friendsList}
+          enableEmptySections={true}
+          dataSource={this.ds.cloneWithRows(this.props.friendsList)}
+          renderRow={(data) =>
+            <FriendItem
+              {...data}
+              id={data.key}
+              onChangeItemSelected={this.props.onChangeItemSelected} />}
+        />
+      </View>
+    )
+  }
+}
+FriendsListView.propTypes = {
+  friendsList: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string.isRequired,
+    coordinate: PropTypes.shape({
+      latitude: PropTypes.number.isRequired,
+      longitude: PropTypes.number.isRequired
+    }).isRequired,
+    createAt: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired
+  }).isRequired).isRequired,
+  onChangeItemSelected: PropTypes.func.isRequired
+}
