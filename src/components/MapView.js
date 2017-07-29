@@ -30,13 +30,14 @@ export default class CustomMapView extends Component {
       title: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired
     }).isRequired).isRequired,
-    isSavingMode: PropTypes.bool.isRequired,
-    // keySelected: PropTypes.string,
     zoomEnabled: PropTypes.bool.isRequired,
     scrollEnabled: PropTypes.bool.isRequired,
     showsMyLocationButton: PropTypes.bool.isRequired,
+    isSavingMode: PropTypes.bool,
     targetCoordinate: PropTypes.object,
-    onChangeCoordinate: PropTypes.func
+    onChangeCoordinate: PropTypes.func,
+    keyItemSelected: PropTypes.string,
+    newRegion: PropTypes.object
   }
   getCurrentLocation() {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -48,10 +49,11 @@ export default class CustomMapView extends Component {
           longitudeDelta: DEFAULT_LONGITUDE_DELTA
         }
       })
-      this.props.onChangeCoordinate({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
-      })
+      if (this.props.onChangeCoordinate)
+        this.props.onChangeCoordinate({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        })
 
     },
       (error) => ToastAndroid.show('Can not get your location', ToastAndroid.LONG)
@@ -72,6 +74,10 @@ export default class CustomMapView extends Component {
     // this setTimeout to re-render mapview to show my location button
     // this is a bug from react native map package
     setTimeout(() => this.setState({ bottom: 0 }), 1000)
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.newRegion !== this.props.newRegion)
+      this.mapView.animateToCoordinate(nextProps.newRegion)
   }
   componentDidUpdate() {
     if ((this.props.isSavingMode) && (!this.wasUpdate)) {
@@ -115,7 +121,7 @@ export default class CustomMapView extends Component {
         {newMarker}
         {this.props.listMarkers.map(marker => (
           <Marker key={marker.key}
-            markerSelected={marker.key === this.props.keySelected}
+            markerSelected={marker.key === this.props.keyItemSelected}
             marker={marker} />
         ))}
       </MapView>
