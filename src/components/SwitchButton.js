@@ -1,45 +1,6 @@
 import React, { Component, PropTypes } from 'react'
-import {
-  StyleSheet,
-  View
-} from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import BaseSwitchButton from './BaseSwitchButton'
-
-export default class SwitchButton extends Component {
-  constructor(props) {
-    super(props)
-  }
-  static propTypes = {
-    leftButtonBackgroundColor: PropTypes.string.isRequired,
-    rightButtonBackgroundColor: PropTypes.string.isRequired,
-    leftButtonTextColor: PropTypes.string.isRequired,
-    rightButtonTextColor: PropTypes.string.isRequired,
-    onSwitchButtonPress: PropTypes.func.isRequired
-  }
-  onSwitchToLeft() {
-    this.props.onSwitchButtonPress(true)
-  }
-  onSwitchToRight() {
-    this.props.onSwitchButtonPress(false)
-  }
-  render() {
-    return (
-      <View style={styles.mainContainer}>
-        <BaseSwitchButton buttonText='FRIENDS'
-          backgroundColor={this.props.leftButtonBackgroundColor}
-          textColor={this.props.leftButtonTextColor}
-          onSwitchState={this.onSwitchToLeft.bind(this)}
-        />
-        <BaseSwitchButton buttonText='LOCATIONS'
-          backgroundColor={this.props.rightButtonBackgroundColor}
-          textColor={this.props.rightButtonTextColor}
-          onSwitchState={this.onSwitchToRight.bind(this)}
-        />
-      </View>
-    )
-  }
-}
-
 const styles = StyleSheet.create({
   mainContainer: {
     flexDirection: 'row',
@@ -53,3 +14,73 @@ const styles = StyleSheet.create({
     borderRadius: 30
   }
 })
+
+export default class SwitchButton extends Component {
+  constructor(props) {
+    super(props)
+    this.mapPage = 0
+    this.listPage = 1
+    this.state = {
+      leftButtonBackgroundColor: '#D7D8DA',
+      rightButtonBackgroundColor: '#FD482E',
+      leftButtonTextColor: '#FD482E',
+      rightButtonTextColor: '#ffffff'
+    }
+  }
+  onSwitchToLeft() {
+    this.setState({
+      leftButtonBackgroundColor: '#FD482E',
+      rightButtonBackgroundColor: '#D7D8DA',
+      leftButtonTextColor: '#ffffff',
+      rightButtonTextColor: '#FD482E'
+    })
+    this.props.onChangeCurrentPage(this.listPage)
+  }
+  onSwitchToRight() {
+    this.setState({
+      leftButtonBackgroundColor: '#D7D8DA',
+      rightButtonBackgroundColor: '#FD482E',
+      leftButtonTextColor: '#FD482E',
+      rightButtonTextColor: '#ffffff'
+    })
+    this.props.onChangeCurrentPage(this.mapPage)
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.currentPage !== this.props.currentPage) {
+      if (nextProps.currentPage === this.listPage)
+        this.setState({
+          leftButtonBackgroundColor: '#FD482E',
+          rightButtonBackgroundColor: '#D7D8DA',
+          leftButtonTextColor: '#ffffff',
+          rightButtonTextColor: '#FD482E'
+        })
+      else
+        this.setState({
+          leftButtonBackgroundColor: '#D7D8DA',
+          rightButtonBackgroundColor: '#FD482E',
+          leftButtonTextColor: '#FD482E',
+          rightButtonTextColor: '#ffffff'
+        })
+    }
+  }
+  render() {
+    return (
+      <View style={styles.mainContainer}>
+        <BaseSwitchButton buttonText='LOCATIONS'
+          backgroundColor={this.state.rightButtonBackgroundColor}
+          textColor={this.state.rightButtonTextColor}
+          onButtonPress={this.onSwitchToRight.bind(this)}
+        />
+        <BaseSwitchButton buttonText='FRIENDS'
+          backgroundColor={this.state.leftButtonBackgroundColor}
+          textColor={this.state.leftButtonTextColor}
+          onButtonPress={this.onSwitchToLeft.bind(this)}
+        />
+      </View>
+    )
+  }
+}
+SwitchButton.propTypes = {
+  currentPage: PropTypes.number.isRequired,
+  onChangeCurrentPage: PropTypes.func.isRequired
+}
