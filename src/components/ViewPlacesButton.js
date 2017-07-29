@@ -1,10 +1,6 @@
-import React, { Component, PropTypes } from 'react'
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableNativeFeedback
-} from 'react-native'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { StyleSheet, View, Text, TouchableNativeFeedback } from 'react-native'
 
 const styles = StyleSheet.create({
   buttonWrapperStyle: {
@@ -29,29 +25,19 @@ const styles = StyleSheet.create({
   }
 })
 
-export default class ViewPlacesButton extends Component {
-  constructor(props) {
-    super(props)
-  }
-  static propTypes = {
-    onButtonPress: PropTypes.func.isRequired
-  }
-  onButtonPress() {
-    this.props.onButtonPress()
-  }
-  render() {
-    return (
-      <View style={styles.buttonWrapperStyle}>
-        <TouchableNativeFeedback
-          onPress={() => this.onButtonPress()}
-          background={TouchableNativeFeedback.Ripple('#adadad', false)}>
-          <View style={styles.buttonContainerStyle}>
-            <Text style={styles.buttonTextStyle}>
-              VISITED PLACES
+export default ViewPlacesButton = ({ navigation }) => (
+  <View style={styles.buttonWrapperStyle}>
+    <TouchableNativeFeedback
+      onPress={() => navigation.dispatch({ type: 'VisitedLocations' })}
+      background={TouchableNativeFeedback.Ripple('#adadad', false)}>
+      <View style={styles.buttonContainerStyle}>
+        <Text style={styles.buttonTextStyle}>
+          VISITED PLACES
             </Text>
-          </View>
-        </TouchableNativeFeedback>
       </View>
-    )
-  }
+    </TouchableNativeFeedback>
+  </View>
+)
+ViewPlacesButton.propTypes = {
+  navigation: PropTypes.object.isRequired
 }
