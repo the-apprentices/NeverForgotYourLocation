@@ -1,96 +1,14 @@
-import React, { Component } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { StyleSheet, View, Image, ToastAndroid } from 'react-native'
-import {
-  signInWithFacebook,
-  getCurrentUser,
-  signOut
-} from '../helpers/handleFacebookAcount'
-import FacebookLoginButton from '../containers/LoginWithFacebook'
-import SaveButton from '../containers/DispatchSaveLocation'
-import ViewPlacesButton from '../containers/ViewPlaces'
+import { connect } from 'react-redux'
 
+import FacebookLoginButton from '../components/FacebookLoginButton'
+import SaveButton from '../components/SaveLocationButton'
+import ViewPlacesButton from '../components/ViewPlacesButton'
 const icons = {
   logo: require('../assets/imgs/logo.png')
 }
-
-export default class MainScreen extends Component {
-  constructor(props) {
-    super(props)
-    this.currentUser = null
-    this.state = {
-      buttonText: 'Loading ...'
-    }
-  }
-  static navigationOptions = {
-    header: null
-  }
-
-  updateButtonInfo = async () => {
-    this.currentUser = await getCurrentUser()
-    const buttonText = this.currentUser ? `Hi, ${this.currentUser.displayName}`
-      : 'LOG IN WITH FACEBOOK'
-    this.setState({ buttonText })
-  }
-  onLoginAction = async () => {
-    this.setState({ buttonText: 'Loading ...' })
-    try {
-      await signInWithFacebook()
-      this.updateButtonInfo()
-    } catch (error) {
-      this.setState({ buttonText: 'LOG IN WITH FACEBOOK' })
-      ToastAndroid.show('Please check your connection!', ToastAndroid.LONG)
-    }
-  }
-  onLogoutAction = async () => {
-    this.setState({ buttonText: 'Loading ...' })
-    await signOut()
-    this.updateButtonInfo()
-  }
-  onLoginButtonPress() {
-    if (this.currentUser)
-      this.onLogoutAction()
-    else
-      this.onLoginAction()
-  }
-  onSaveButtonPress(navigate) {
-    setTimeout(() => {
-      navigate('SaveLocation', { isSavingState: false, currentUser: this.currentUser })
-    }, 100)
-  }
-  onViewButtonPress(navigate) {
-    setTimeout(() => {
-      navigate('VisitedLocations', { currentUser: this.currentUser })
-    }, 100)
-  }
-
-  componentWillMount() {
-    this.updateButtonInfo()
-  }
-
-  render() {
-    const { navigate } = this.props.navigation
-    return (
-      <View style={styles.mainContainer}>
-        <View style={styles.logoContainer}>
-          <Image source={icons.logo} />
-        </View>
-        <FacebookLoginButton
-          buttonWrapperStyle={styles.loginButtonWrapper}
-          buttonText={this.state.buttonText}
-          onButtonPress={() => this.onLoginButtonPress()} />
-        <View style={styles.mainActionContainer}>
-          <SaveButton
-            buttonWrapperStyle={styles.saveButtonWrapper}
-            onButtonPress={() => this.onSaveButtonPress(navigate)} />
-          <ViewPlacesButton
-            navigate={navigate}
-            onButtonPress={() => this.onViewButtonPress(navigate)} />
-        </View>
-      </View>
-    )
-  }
-}
-
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
@@ -112,3 +30,32 @@ const styles = StyleSheet.create({
     marginBottom: 15
   }
 })
+
+const HomeScreen = ({ auth, dispatch, navigation }) => (
+  <View style={styles.mainContainer}>
+    <View style={styles.logoContainer}>
+      <Image source={icons.logo} />
+    </View>
+    <FacebookLoginButton style={styles.loginButtonWrapper}
+      auth={auth}
+      dispatch={dispatch} />
+    <View style={styles.mainActionContainer}>
+      <SaveButton style={styles.saveButtonWrapper}
+        navigation={navigation} />
+      <ViewPlacesButton navigation={navigation} />
+    </View>
+  </View>
+)
+HomeScreen.navigationOptions = {
+  header: null
+}
+HomeScreen.propTypes = {
+  auth: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  navigation: PropTypes.object.isRequired
+}
+const mapStateToProps = state => ({
+  auth: state.auth
+})
+
+export default connect(mapStateToProps)(HomeScreen)
