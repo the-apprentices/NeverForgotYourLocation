@@ -1,41 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableNativeFeedback
-} from 'react-native'
-
-export default class BaseSwitchButton extends Component {
-  constructor(props) {
-    super(props)
-  }
-  static propTypes = {
-    buttonText: PropTypes.string.isRequired,
-    backgroundColor: PropTypes.string.isRequired,
-    textColor: PropTypes.string.isRequired,
-    onSwitchState: PropTypes.func.isRequired
-  }
-  onButtonPress() {
-    this.props.onSwitchState()
-  }
-  render() {
-    const backgroundColorState = { backgroundColor: this.props.backgroundColor }
-    const textColorState = { color: this.props.textColor }
-    return (
-      <View style={[styles.buttonContainer, backgroundColorState]}>
-        <TouchableNativeFeedback
-          onPress={() => this.onButtonPress()}
-          background={TouchableNativeFeedback.Ripple('#adadad', true)}>
-          <View style={[styles.buttonContainer, { width: '100%' }, backgroundColorState]}>
-            <Text style={[styles.buttonText, textColorState]}>{this.props.buttonText}</Text>
-          </View>
-        </TouchableNativeFeedback>
-      </View>
-    )
-  }
-}
-
+import { StyleSheet, View, Text, TouchableNativeFeedback } from 'react-native'
 const styles = StyleSheet.create({
   buttonContainer: {
     height: '100%',
@@ -52,3 +16,21 @@ const styles = StyleSheet.create({
     fontFamily: 'ProximaNovaSoft-Regular'
   }
 })
+
+export default BaseSwitchButton = ({ buttonText, backgroundColor, textColor, onButtonPress }) => (
+  <View style={[styles.buttonContainer, { backgroundColor: backgroundColor }]}>
+    <TouchableNativeFeedback
+      onPress={() => onButtonPress()}
+      background={TouchableNativeFeedback.Ripple('#adadad', true)}>
+      <View style={[styles.buttonContainer, { width: '100%' }, { backgroundColor: backgroundColor }]}>
+        <Text style={[styles.buttonText, { color: textColor }]}>{buttonText}</Text>
+      </View>
+    </TouchableNativeFeedback>
+  </View>
+)
+BaseSwitchButton.PropTypes = {
+  buttonText: PropTypes.string.isRequired,
+  backgroundColor: PropTypes.string.isRequired,
+  textColor: PropTypes.string.isRequired,
+  onButtonPress: PropTypes.func.isRequired
+}
