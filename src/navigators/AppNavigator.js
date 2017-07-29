@@ -11,7 +11,7 @@ import EditLocation from '../screens/EditLocation'
 export const AppNavigator = StackNavigator({
   Home: { screen: HomeScreen },
   SaveLocation: { screen: SaveLocation },
-  // VisitedLocations: { screen: VisitedLocations },
+  VisitedLocations: { screen: VisitedLocations },
   // EditLocation: { screen: EditLocation }
 })
 const AppWithNavigationState = ({ dispatch, nav }) => (
