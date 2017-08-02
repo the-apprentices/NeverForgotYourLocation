@@ -34,7 +34,7 @@ export const getLocations = (userId, callback) => {
     ToastAndroid.show('Please check your connection!', ToastAndroid.LONG)
   }
 }
-export const saveLocation = (infor, callback) => {
+export const saveLocation = (infor) => {
   try {
     const marker = {
       coordinate: {
@@ -46,11 +46,26 @@ export const saveLocation = (infor, callback) => {
       createAt: Date.now(),
       visible: true
     }
-    const newMarker = database.ref(infor.uid + '/markers').push()
+    const newMarker = database.ref(infor.userId + '/markers').push()
     newMarker.set(marker)
-    callback({ ...marker, key: `${infor.coordinate.latitude}${infor.coordinate.longitude}` })
   } catch (error) {
-    console.warn(JSON.stringify(error))
+    ToastAndroid.show('Please check your connection!', ToastAndroid.LONG)
+  }
+}
+export const invisibleLocation = (infor) => {
+  try {
+    database.ref(infor.userId + '/markers/' + infor.markerKey).update({ visible: false })
+  } catch (error) {
+    ToastAndroid.show('Please check your connection!', ToastAndroid.LONG)
+  }
+}
+export const editLocation = (infor) => {
+  try {
+    database.ref(infor.userId + '/markers/' + infor.markerKey).update({
+      title: infor.title,
+      description: infor.description
+    })
+  } catch (error) {
     ToastAndroid.show('Please check your connection!', ToastAndroid.LONG)
   }
 }
