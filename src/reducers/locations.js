@@ -12,14 +12,6 @@ export default (state = initialState, action) => {
         isLoading: false,
         locations: action.locations
       }
-    case ADD_LOCATION:
-      return {
-        isLoading: false,
-        locations: [
-          action.location,
-          ...state.locations
-        ]
-      }
     default:
       return state
   }
