@@ -1,104 +1,17 @@
-import React, { Component } from 'react'
-import {
-  StyleSheet,
-  View,
-  Image,
-  TouchableNativeFeedback
-} from 'react-native'
-import MapView from '../containers/MapView'
-import WrapLocationInformation from '../containers/WrapLocationInformation'
-import DoneButton from '../components/DoneButton'
-import * as Handler from '../helpers/handleDataWithFirebase'
-
+import React, { Component, PropTypes } from 'react'
+import { StyleSheet, View, Image, TouchableNativeFeedback } from 'react-native'
+import MapView from '../components/MapView'
+import WrapLocationInformation from '../components/WrapLocationInformation'
+import DoneButton from '../components/DoneEditButton'
 const DEFAULT_LATITUDE_DELTA = 0.005
 const DEFAULT_LONGITUDE_DELTA = 0.001
-const icons = {
-  search: require('../assets/imgs/search.png'),
-  recycleBin: require('../assets/imgs/recycle-bin.png'),
-  edit: require('../assets/imgs/pencil.png')
-}
-
-export default class EditLocation extends Component {
-  constructor(props) {
-    super(props)
-    this.placeData = null
-    this.setParams = null
-    this.state = {
-      placeData: [],
-      placeName: '',
-      placeAddress: ''
-    }
-  }
-  static navigationOptions = ({ navigation }) => {
-    const { state, setParams, goBack } = navigation
-    let { title, description, placeData } = state.params
-    return {
-      title: state.params.placeData.title,
-      headerRight: <View style={styles.editWrap}>
-        <DoneButton onButtonPress={() => {
-          state.params.onDoneButtonPress(placeData.key, title, description)
-          goBack()
-        }} />
-      </View>
-    }
-  }
-  onChangePlaceName(placeName) {
-    this.setState({
-      placeName: placeName,
-      placeData: [{ ...this.placeData, title: placeName }]
-    })
-    this.setParams({ title: placeName })
-  }
-  onChangePlaceAddress(placeAddress) {
-    this.setState({
-      placeAddress: placeAddress,
-      placeData: [{ ...this.placeData, description: placeAddress }]
-    })
-    this.setParams({ description: placeAddress })
-  }
-
-  componentDidMount() {
-    this.setState({
-      placeData: [this.placeData],
-      placeName: this.placeData.title,
-      placeAddress: this.placeData.description
-    })
-    this.setParams({
-      title: this.placeData.title,
-      description: this.placeData.description
-    })
-  }
-  render() {
-    const { state, setParams } = this.props.navigation
-    this.placeData = state.params.placeData
-    this.setParams = setParams
-    const region = {
-      ...state.params.placeData.coordinate,
-      latitudeDelta: DEFAULT_LATITUDE_DELTA,
-      longitudeDelta: DEFAULT_LONGITUDE_DELTA
-    }
-    return (
-      <View style={styles.mainContainer}>
-        <MapView
-          region={region}
-          listMarkers={this.state.placeData}
-          isSavingState={false}
-          zoomEnabled={false}
-          scrollEnabled={false}
-          showsMyLocationButton={false} />
-        <View style={styles.editInforContainer}>
-          <WrapLocationInformation
-            placeName={this.state.placeName}
-            onChangePlaceName={this.onChangePlaceName.bind(this)}
-            placeAddress={this.state.placeAddress}
-            onChangePlaceAddress={this.onChangePlaceAddress.bind(this)} />
-        </View>
-      </View>
-    )
-  }
-}
-
 const styles = StyleSheet.create({
+  doneWrap: {
+    flex: 1,
+    width: 80,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   mainContainer: {
     flex: 1
   },
@@ -106,3 +19,71 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject
   }
 })
+export default class EditLocation extends Component {
+  constructor(props) {
+    super(props)
+    this.locationData = null
+    this.setParams = null
+    this.state = {
+      locationData: [],
+      title: '',
+      description: ''
+    }
+  }
+  onChangeTitle(title) {
+    this.setParams({ title, locationData: [{ ...this.locationData, title }] })
+  }
+  onChangeDescription(description) {
+    this.setParams({ description, locationData: [{ ...this.locationData, description }] })
+  }
+  componentDidMount() {
+    this.setParams({
+      title: this.locationData.oldTitle,
+      description: this.locationData.oldDescription
+    })
+  }
+  render() {
+    const { state, setParams } = this.props.navigation
+    this.locationData = state.params
+    this.setParams = setParams
+    return (
+      <View style={styles.mainContainer}>
+        <MapView
+          listMarkers={[state.params]}
+          initialRegion={{
+            ...state.params.coordinate,
+            latitudeDelta: DEFAULT_LATITUDE_DELTA,
+            longitudeDelta: DEFAULT_LONGITUDE_DELTA
+          }}
+          zoomEnabled={false}
+          scrollEnabled={false}
+          showsMyLocationButton={false} />
+        <View style={styles.editInforContainer}>
+          <WrapLocationInformation
+            placeName={state.params.title}
+            onChangePlaceName={this.onChangeTitle.bind(this)}
+            placeAddress={state.params.description}
+            onChangePlaceAddress={this.onChangeDescription.bind(this)} />
+        </View>
+      </View>
+    )
+  }
+}
+EditLocation.navigationOptions = ({ navigation }) => {
+  const { state, goBack } = navigation
+  const { oldTitle, userId, key, title, description, dispatch } = state.params
+  return {
+    title: oldTitle,
+    headerRight: <View style={styles.doneWrap}>
+      <DoneButton userId={userId}
+        markerKey={key}
+        title={title}
+        description={description}
+        dispatch={dispatch}
+        navigation={navigation} />
+    </View>
+  }
+}
+EditLocation.propTypes = {
+  navigation: PropTypes.object.isRequired
+}
