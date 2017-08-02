@@ -1,81 +1,15 @@
 import React, { Component, PropTypes } from 'react'
-import { StyleSheet, View, Text, TouchableNativeFeedback } from 'react-native'
-import Helpers from '../helpers/handleData'
+import { StyleSheet, View, Text, TouchableNativeFeedback, TouchableHighlight } from 'react-native'
+import Swipeout from 'react-native-swipeout'
+import EditButton from './EditButton'
+import DeleteButton from './DeleteButton'
+import { getAvatar, formatDateTime } from '../helpers/reformatData'
 
-export default class FriendItem extends Component {
-  constructor(props) {
-    super(props)
-    this.avatarFormat = Helpers.getAvatar(this.props.title)
-    this.dateFormat = Helpers.formatDateTime(this.props.createAt)
-  }
-  static propTypes = {
-    id: PropTypes.string.isRequired,
-    coordinate: PropTypes.shape({
-      latitude: PropTypes.number.isRequired,
-      longitude: PropTypes.number.isRequired
-    }).isRequired,
-    createAt: PropTypes.number.isRequired,
-    description: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    keyItemLongPressState: PropTypes.string.isRequired,
-    onChangeLongPressState: PropTypes.func.isRequired,
-    onListViewElementSelected: PropTypes.func.isRequired,
-    setParams: PropTypes.func.isRequired,
-    onDeleteButtonPress: PropTypes.func.isRequired,
-    onEditButtonPress: PropTypes.func.isRequired
-  }
-  onRowPress() {
-    setTimeout(() => this.props.onListViewElementSelected(this.props.coordinate, this.props.id), 10)
-    this.props.onChangeLongPressState('')
-    this.props.setParams({ isLongPressState: false })
-  }
-  onLongPress() {
-    this.onChangeLongPressState()
-  }
-  onChangeLongPressState() {
-    this.props.onChangeLongPressState(this.props.id)
-    this.props.setParams({
-      isLongPressState: true,
-      onDeleteButtonPress: this.props.onDeleteButtonPress,
-      onEditButtonPress: this.props.onEditButtonPress,
-      markerKey: this.props.id
-    })
-  }
-  render() {
-    const backgroundColorWhenSelected = (this.props.keyItemLongPressState === this.props.id) ?
-      '#adadad' : '#ffffff'
-    return (
-      <TouchableNativeFeedback
-        onPress={() => this.onRowPress()}
-        onLongPress={() => this.onLongPress()}
-        background={TouchableNativeFeedback.Ripple('#adadad', false)}>
-        <View style={[styles.friendContainer, { backgroundColor: backgroundColorWhenSelected }]}>
-          <View style={styles.avatarContainer}>
-            <View style={[styles.avatarContent, { backgroundColor: this.avatarFormat.color }]}>
-              <Text style={styles.avatarLetter}>{this.avatarFormat.letter}</Text>
-            </View>
-          </View>
-          <View style={styles.informationContainer}>
-            <Text style={styles.friendName} numberOfLines={1}>{this.props.title}</Text>
-            <Text style={styles.friendAddress} numberOfLines={2}>{this.props.description}</Text>
-          </View>
-          <View style={styles.dateContainer}>
-            <Text style={styles.dateFormat}>{this.dateFormat}</Text>
-          </View>
-        </View>
-      </TouchableNativeFeedback>
-    )
-  }
-}
 const styles = StyleSheet.create({
   friendContainer: {
     flexDirection: 'row',
     backgroundColor: '#ffffff',
     padding: 5,
-    marginTop: 1.5,
-    marginBottom: 1.5,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
     borderColor: '#D7D8DA'
   },
   avatarContainer: {
@@ -120,3 +54,72 @@ const styles = StyleSheet.create({
     fontFamily: 'ProximaNovaSoft-Regular'
   }
 })
+
+export default class FriendItem extends Component {
+  constructor(props) {
+    super(props)
+    this.avatar = getAvatar(this.props.title)
+    this.dateTime = formatDateTime(this.props.createAt)
+  }
+  onRowPress() {
+    let item = {
+      keyItemSelected: this.props.id,
+      coordinateItemSelected: this.props.coordinate
+    }
+    this.props.onChangeItemSelected(item)
+  }
+  render() {
+    const swipeoutBtns = [
+      {
+        component: <EditButton navigation={this.props.navigation}
+          auth={this.props.auth}
+          markerKey={this.props.id}
+          coordinate={this.props.coordinate}
+          oldTitle={this.props.title}
+          oldDescription={this.props.description}
+          dispatch={this.props.dispatch} />
+      },
+      {
+        component: <DeleteButton auth={this.props.auth}
+          markerKey={this.props.id}
+          dispatch={this.props.dispatch} />
+      }
+    ]
+    return (
+      <Swipeout right={swipeoutBtns}>
+        <TouchableNativeFeedback
+          onPress={() => this.onRowPress()}
+          background={TouchableNativeFeedback.Ripple('#adadad', false)}>
+          <View style={styles.friendContainer}>
+            <View style={styles.avatarContainer}>
+              <View style={[styles.avatarContent, { backgroundColor: this.avatar.color }]}>
+                <Text style={styles.avatarLetter}>{this.avatar.letter}</Text>
+              </View>
+            </View>
+            <View style={styles.informationContainer}>
+              <Text style={styles.friendName} numberOfLines={1}>{this.props.title}</Text>
+              <Text style={styles.friendAddress} numberOfLines={2}>{this.props.description}</Text>
+            </View>
+            <View style={styles.dateContainer}>
+              <Text style={styles.dateFormat}>{this.dateTime}</Text>
+            </View>
+          </View>
+        </TouchableNativeFeedback>
+      </Swipeout>
+    )
+  }
+}
+FriendItem.propTypes = {
+  id: PropTypes.string.isRequired,
+  coordinate: PropTypes.shape({
+    latitude: PropTypes.number.isRequired,
+    longitude: PropTypes.number.isRequired
+  }).isRequired,
+  createAt: PropTypes.number.isRequired,
+  description: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  onChangeItemSelected: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  navigation: PropTypes.object.isRequired
+}
