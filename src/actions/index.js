@@ -1,5 +1,5 @@
 import { loadingAuth, signIn, signOut } from './auth'
-import { receiveLocations, addLocation } from './locations'
+import { receiveLocations } from './locations'
 import * as handleAuthentication from '../models/auth'
 import * as handleLocations from '../models/locations'
 
@@ -30,8 +30,12 @@ export const getLocations = (userId) => dispatch => {
     dispatch(receiveLocations(locations))
   })
 }
-export const storeLocation = (uid, coordinate, title, description) => dispatch => {
-  handleLocations.saveLocation({uid, coordinate, title, description}, (location) => {
-    dispatch(addLocation(location))
-  })
+export const storeLocation = (userId, coordinate, title, description) => dispatch => {
+  handleLocations.saveLocation({ userId, coordinate, title, description })
+}
+export const deleteLocation = (userId, markerKey) => dispatch => {
+  handleLocations.invisibleLocation({ userId, markerKey })
+}
+export const editLocation = (userId, markerKey, title, description) => dispatch => {
+  handleLocations.editLocation({ userId, markerKey, title, description })
 }
