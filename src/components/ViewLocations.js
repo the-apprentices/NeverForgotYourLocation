@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
 export default class ViewLocations extends Component {
   constructor(props) {
     super(props)
-    this.mapPage = 0
+    this.mapPage = 1
     this.state = {
       keyItemSelected: '',
       coordinateItemSelected: null
@@ -34,7 +34,15 @@ export default class ViewLocations extends Component {
       <ViewPagerAndroid style={styles.viewPagerContainer}
         ref={(viewPager) => { this.viewPager = viewPager }}
         initialPage={this.props.currentPage}
-        onPageSelected={this.onPageSelected}>
+        onPageSelected={this.onPageSelected}
+        scrollEnabled={false}>
+        <View>
+          <FriendsListView friendsList={this.props.locations}
+            onChangeItemSelected={this.onChangeItemSelected.bind(this)}
+            auth={this.props.auth}
+            dispatch={this.props.dispatch}
+            navigation={this.props.navigation} />
+        </View>
         <View>
           <MapView listMarkers={this.props.locations}
             keyItemSelected={this.state.keyItemSelected}
@@ -42,10 +50,6 @@ export default class ViewLocations extends Component {
             zoomEnabled={true}
             scrollEnabled={true}
             showsMyLocationButton={true} />
-        </View>
-        <View>
-          <FriendsListView friendsList={this.props.locations}
-            onChangeItemSelected={this.onChangeItemSelected.bind(this)} />
         </View>
       </ViewPagerAndroid>
     )
@@ -61,5 +65,8 @@ ViewLocations.propTypes = {
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired
   }).isRequired).isRequired,
-  onChangeCurrentPage: PropTypes.func.isRequired
+  onChangeCurrentPage: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  navigation: PropTypes.object.isRequired
 }
