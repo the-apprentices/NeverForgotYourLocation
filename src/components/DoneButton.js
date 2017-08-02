@@ -47,7 +47,7 @@ const onButtonPress = async (state, setParams) => {
       placeName: '',
       placeAddress: initPlaceAddress
     })
-    ToastAndroid.show('Your location saved successfully!', ToastAndroid.LONG)
+    ToastAndroid.show('Your location was saved successfully!', ToastAndroid.LONG)
   }
 }
 export default DoneButton = ({ state, setParams }) => (
