@@ -37,7 +37,10 @@ export default class FriendsListView extends Component {
             <FriendItem
               {...data}
               id={data.key}
-              onChangeItemSelected={this.props.onChangeItemSelected} />}
+              onChangeItemSelected={this.props.onChangeItemSelected}
+              auth={this.props.auth}
+              dispatch={this.props.dispatch}
+              navigation={this.props.navigation} />}
         />
       </View>
     )
@@ -54,5 +57,8 @@ FriendsListView.propTypes = {
     description: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired
   }).isRequired).isRequired,
-  onChangeItemSelected: PropTypes.func.isRequired
+  onChangeItemSelected: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  navigation: PropTypes.object.isRequired
 }
