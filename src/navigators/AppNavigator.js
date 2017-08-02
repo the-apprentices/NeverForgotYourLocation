@@ -12,7 +12,7 @@ export const AppNavigator = StackNavigator({
   Home: { screen: HomeScreen },
   SaveLocation: { screen: SaveLocation },
   VisitedLocations: { screen: VisitedLocations },
-  // EditLocation: { screen: EditLocation }
+  EditLocation: { screen: EditLocation }
 })
 const AppWithNavigationState = ({ dispatch, nav }) => (
   <AppNavigator navigation={addNavigationHelpers({ dispatch, state: nav })} />
