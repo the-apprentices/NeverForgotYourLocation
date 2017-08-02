@@ -33,7 +33,27 @@ function nav(state = initialNavState, action) {
       break
     case 'VisitedLocations':
       nextState = AppNavigator.router.getStateForAction(
-        NavigationActions.navigate({ routeName: 'VisitedLocations' }),
+        NavigationActions.navigate({ routeName: 'VisitedLocations', params: { edited: false } }),
+        state
+      )
+      break
+    case 'EditLocation':
+      nextState = AppNavigator.router.getStateForAction(
+        NavigationActions.navigate({
+          routeName: 'EditLocation',
+          params: {
+            ...action.params,
+            title: action.params.oldTitle,
+            description: action.params.oldDescription
+          }
+        }),
+        state
+      )
+      break
+    case 'BackAfterEdit':
+      console.warn('ji')
+      nextState = AppNavigator.router.getStateForAction(
+        NavigationActions.back({ routeName: 'VisitedLocations', params: { edited: true } }),
         state
       )
       break
