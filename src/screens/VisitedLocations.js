@@ -1,28 +1,10 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { StyleSheet, View, Image, TouchableNativeFeedback } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import ViewLocations from '../components/ViewLocations'
 import SwitchButton from '../components/SwitchButton'
-const icons = {
-  search: require('../assets/imgs/search.png')
-}
+import Header from '../headers/VisitedLocations'
 const styles = StyleSheet.create({
-  searchWrap: {
-    flex: 1,
-    width: 55,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  searchButton: {
-    width: 30,
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  iconSize: {
-    width: 25,
-    height: 25
-  },
   mainContainer: {
     flex: 1
   },
@@ -52,7 +34,10 @@ class VisitedLocations extends Component {
       <View style={styles.mainContainer}>
         <ViewLocations currentPage={this.state.currentPageView}
           locations={this.props.locations}
-          onChangeCurrentPage={this.onChangeCurrentPage.bind(this)} />
+          onChangeCurrentPage={this.onChangeCurrentPage.bind(this)}
+          auth={this.props.auth}
+          dispatch={this.props.dispatch}
+          navigation={this.props.navigation} />
         <View style={styles.switchButtonContainer}>
           <SwitchButton
             currentPage={this.state.currentPageView}
@@ -62,20 +47,7 @@ class VisitedLocations extends Component {
     )
   }
 }
-VisitedLocations.navigationOptions = ({ navigation }) => {
-  return {
-    title: 'VISITED LOCATIONS',
-    headerRight: <View style={styles.searchWrap}>
-      <TouchableNativeFeedback
-        onPress={() => { }}
-        background={TouchableNativeFeedback.Ripple('#adadad', true)}>
-        <View style={styles.searchButton}>
-          <Image style={styles.iconSize} source={icons.search} />
-        </View>
-      </TouchableNativeFeedback>
-    </View>
-  }
-}
+VisitedLocations.navigationOptions = Header
 VisitedLocations.propTypes = {
   locations: PropTypes.arrayOf(PropTypes.shape({
     coordinate: PropTypes.shape({
