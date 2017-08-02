@@ -37,7 +37,8 @@ export default class CustomMapView extends Component {
     targetCoordinate: PropTypes.object,
     onChangeCoordinate: PropTypes.func,
     keyItemSelected: PropTypes.string,
-    newRegion: PropTypes.object
+    newRegion: PropTypes.object,
+    initialRegion: PropTypes.object
   }
   getCurrentLocation() {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -113,7 +114,7 @@ export default class CustomMapView extends Component {
         mapType={MAP_TYPES.STANDARD}
         showsUserLocation={true}
         toolbarEnabled={false}
-        initialRegion={this.state.region}
+        initialRegion={this.props.initialRegion ? this.props.initialRegion : this.state.region}
         showsMyLocationButton={this.props.showsMyLocationButton}
         zoomEnabled={this.props.zoomEnabled}
         scrollEnabled={this.props.scrollEnabled}

@@ -18,13 +18,13 @@ const styles = StyleSheet.create({
 export default class SwitchButton extends Component {
   constructor(props) {
     super(props)
-    this.mapPage = 0
-    this.listPage = 1
+    this.listPage = 0
+    this.mapPage = 1
     this.state = {
-      leftButtonBackgroundColor: '#D7D8DA',
-      rightButtonBackgroundColor: '#FD482E',
-      leftButtonTextColor: '#FD482E',
-      rightButtonTextColor: '#ffffff'
+      leftButtonBackgroundColor: '#FD482E',
+      rightButtonBackgroundColor: '#D7D8DA',
+      leftButtonTextColor: '#ffffff',
+      rightButtonTextColor: '#FD482E'
     }
   }
   onSwitchToLeft() {
@@ -66,15 +66,15 @@ export default class SwitchButton extends Component {
   render() {
     return (
       <View style={styles.mainContainer}>
-        <BaseSwitchButton buttonText='LOCATIONS'
-          backgroundColor={this.state.rightButtonBackgroundColor}
-          textColor={this.state.rightButtonTextColor}
-          onButtonPress={this.onSwitchToRight.bind(this)}
-        />
         <BaseSwitchButton buttonText='FRIENDS'
           backgroundColor={this.state.leftButtonBackgroundColor}
           textColor={this.state.leftButtonTextColor}
           onButtonPress={this.onSwitchToLeft.bind(this)}
+        />
+        <BaseSwitchButton buttonText='LOCATIONS'
+          backgroundColor={this.state.rightButtonBackgroundColor}
+          textColor={this.state.rightButtonTextColor}
+          onButtonPress={this.onSwitchToRight.bind(this)}
         />
       </View>
     )
