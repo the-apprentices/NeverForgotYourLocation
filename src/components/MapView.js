@@ -1,15 +1,18 @@
 import React, { Component, PropTypes } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import MapView, { MAP_TYPES, PROVIDER_GOOGLE } from 'react-native-maps'
 import Marker from '../components/Marker'
 import NewMarker from '../components/NewMarker'
 const DEFAULT_LATITUDE_DELTA = 0.005
 const DEFAULT_LONGITUDE_DELTA = 0.001
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1
+  },
   mapContainer: {
     ...StyleSheet.absoluteFillObject,
     bottom: 1
-  },
+  }
 })
 
 export default class CustomMapView extends Component {
@@ -96,36 +99,36 @@ export default class CustomMapView extends Component {
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchID)
   }
-  onMapPress(e) {
+  onRegionChangeComplete(region) {
     if (this.props.isSavingMode)
-      this.props.onChangeCoordinate(e.nativeEvent.coordinate)
-  }
-  onDragMarker(coordinate) {
-    this.props.onChangeCoordinate(coordinate)
+      this.props.onChangeCoordinate({
+        latitude: region.latitude,
+        longitude: region.longitude
+      })
   }
   render() {
-    const newMarker = !this.props.isSavingMode ? null :
-      <NewMarker targetCoordinate={this.props.targetCoordinate}
-        onDragMarker={this.onDragMarker.bind(this)} />
+    const display = this.props.isSavingMode ? 'flex' : 'none'
     return (
-      <MapView ref={mapView => { this.mapView = mapView }}
-        style={[styles.mapContainer, { bottom: this.state.bottom }]}
-        provider={PROVIDER_GOOGLE}
-        mapType={MAP_TYPES.STANDARD}
-        showsUserLocation={true}
-        toolbarEnabled={false}
-        initialRegion={this.props.initialRegion ? this.props.initialRegion : this.state.region}
-        showsMyLocationButton={this.props.showsMyLocationButton}
-        zoomEnabled={this.props.zoomEnabled}
-        scrollEnabled={this.props.scrollEnabled}
-        onPress={(e) => this.onMapPress(e)}>
-        {newMarker}
-        {this.props.listMarkers.map(marker => (
-          <Marker key={marker.key}
-            markerSelected={marker.key === this.props.keyItemSelected}
-            marker={marker} />
-        ))}
-      </MapView>
+      <View style={styles.mainContainer}>
+        <MapView ref={mapView => { this.mapView = mapView }}
+          style={[styles.mapContainer, { bottom: this.state.bottom }]}
+          provider={PROVIDER_GOOGLE}
+          mapType={MAP_TYPES.STANDARD}
+          showsUserLocation={true}
+          toolbarEnabled={false}
+          initialRegion={this.props.initialRegion ? this.props.initialRegion : this.state.region}
+          showsMyLocationButton={this.props.showsMyLocationButton}
+          zoomEnabled={this.props.zoomEnabled}
+          scrollEnabled={this.props.scrollEnabled}
+          onRegionChangeComplete={(region) => this.onRegionChangeComplete(region)}>
+          {this.props.listMarkers.map(marker => (
+            <Marker key={marker.key}
+              markerSelected={marker.key === this.props.keyItemSelected}
+              marker={marker} />
+          ))}
+        </MapView>
+        <NewMarker display={display} />
+      </View>
     )
   }
 }
