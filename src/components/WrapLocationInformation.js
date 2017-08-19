@@ -8,6 +8,7 @@ const icons = {
 }
 const styles = StyleSheet.create({
   saveContentContainer: {
+    ...StyleSheet.absoluteFillObject,
     height: 120,
     flexDirection: 'column',
     justifyContent: 'center',
