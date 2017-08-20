@@ -10,6 +10,7 @@
     "firebase": "^4.1.2",
     "react": "16.0.0-alpha.12",
     "react-native": "0.45.0",
+    "react-native-cardview": "^1.1.0",
     "react-native-fbsdk": "^0.5.1",
     "react-native-maps": "^0.15.2",
     "react-native-swipeout": "^2.1.5",
