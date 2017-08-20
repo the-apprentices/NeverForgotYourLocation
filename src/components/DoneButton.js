@@ -1,16 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { StyleSheet, View, Text, TouchableNativeFeedback, ToastAndroid, Keyboard } from 'react-native'
 import { getAddress } from '../helpers/getData'
 import { storeLocation } from '../actions'
+import { onChangeMode, onChangeCoordinate } from '../actions/saveScreen'
 const styles = StyleSheet.create({
   doneButtonContainter: {
+    flex: 1,
+    width: 80,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  doneButtonWrapper: {
     borderRadius: 5
   },
   doneButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 30
+    borderRadius: 5,
   },
   doneButtonText: {
     fontSize: 16,
@@ -23,8 +31,8 @@ const styles = StyleSheet.create({
     paddingRight: 7
   }
 })
-const onButtonPress = async (state, setParams) => {
-  const { auth, dispatch, placeName, placeAddress, targetCoordinate } = state.params
+const onButtonPress = async (auth, uiState) => {
+  const { dispatch, placeName, placeAddress, targetCoordinate } = uiState
   if (!placeName)
     ToastAndroid.showWithGravity('Please type your place name!',
       ToastAndroid.LONG, ToastAndroid.CENTER)
@@ -36,32 +44,30 @@ const onButtonPress = async (state, setParams) => {
       ToastAndroid.LONG, ToastAndroid.CENTER)
   else {
     dispatch(storeLocation(auth.uid, targetCoordinate, placeName, placeAddress))
-    setParams({
-      isSavingMode: false,
-      displayWrapperInfor: 'none',
-      displaySaveButton: 'flex'
-    })
+    dispatch(onChangeMode(false, dispatch))
     Keyboard.dismiss()
-    let initPlaceAddress = await getAddress(targetCoordinate)
-    setParams({
-      placeName: '',
-      placeAddress: initPlaceAddress
-    })
     ToastAndroid.show('Your location was saved successfully!', ToastAndroid.LONG)
   }
 }
-export default DoneButton = ({ state, setParams }) => (
-  <View style={styles.doneButtonContainter}>
-    <TouchableNativeFeedback
-      onPress={() => onButtonPress(state, setParams)}
-      background={TouchableNativeFeedback.Ripple('#adadad', true)}>
-      <View style={styles.doneButton}>
-        <Text style={styles.doneButtonText}>DONE</Text>
-      </View>
-    </TouchableNativeFeedback>
+const DoneButton = ({ auth, uiState }) => (
+  <View style={[styles.doneButtonContainter, { display: uiState.isSavingMode ? 'flex' : 'none' }]}>
+    <View style={styles.doneButtonWrapper}>
+      <TouchableNativeFeedback
+        onPress={() => onButtonPress(auth, uiState)}
+        background={TouchableNativeFeedback.Ripple('#adadad', true)}>
+        <View style={styles.doneButton}>
+          <Text style={styles.doneButtonText}>DONE</Text>
+        </View>
+      </TouchableNativeFeedback>
+    </View>
   </View>
 )
 DoneButton.propTypes = {
-  state: PropTypes.object.isRequired,
-  setParams: PropTypes.func.isRequired
+  auth: PropTypes.object.isRequired,
+  uiState: PropTypes.object.isRequired
 }
+const mapStateToProps = state => ({
+  auth: state.auth.auth,
+  uiState: state.saveScreen
+})
+export default connect(mapStateToProps)(DoneButton)
