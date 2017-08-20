@@ -6,14 +6,9 @@ import DoneButton from '../components/DoneButton'
 import MapView from '../components/MapView'
 import SaveButton from '../components/SaveButton'
 import WrapLocationInformation from '../components/WrapLocationInformation'
+import { onChangeMode, onChangeCoordinate, onChangePlaceName, onChangePlaceAddress } from '../actions/saveScreen'
 import { getAddress } from '../helpers/getData'
 const styles = StyleSheet.create({
-  doneWrap: {
-    flex: 1,
-    width: 80,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   mainContainer: {
     flex: 1,
     alignItems: 'stretch',
@@ -24,63 +19,55 @@ const styles = StyleSheet.create({
 class SaveLocation extends Component {
   constructor(props) {
     super(props)
-    this.setParams = null
     this.watchID = null
+    this.dispatch = null
   }
   onChangePlaceName(placeName) {
-    this.setParams({ placeName })
+    this.dispatch(onChangePlaceName(placeName))
   }
   onChangePlaceAddress(placeAddress) {
-    this.setParams({ placeAddress })
+    this.dispatch(onChangePlaceAddress(placeAddress))
   }
   onChangeCoordinate = async (targetCoordinate) => {
     let placeAddress = await getAddress(targetCoordinate)
-    this.setParams({ targetCoordinate, placeAddress })
+    this.dispatch(onChangeCoordinate(targetCoordinate, '', placeAddress))
   }
-  onSaveButtonPress = (dispatch) => {
-    this.setParams({
-      isSavingMode: true,
-      displayWrapperInfor: 'flex',
-      displaySaveButton: 'none',
-      dispatch: dispatch,
-      auth: this.props.auth
-    })
+  onSaveButtonPress = () => {
+    this.dispatch(onChangeMode(true, this.dispatch))
   }
   render() {
-    const { state, setParams } = this.props.navigation
-    this.setParams = setParams
+    const uiState = this.props.uiState
+    this.dispatch = this.props.dispatch
     return (
       <View style={styles.mainContainer}>
         <MapView
           listMarkers={this.props.locations}
-          isSavingMode={state.params.isSavingMode}
-          targetCoordinate={state.params.targetCoordinate}
+          isSavingMode={uiState.isSavingMode}
+          targetCoordinate={uiState.coordinate}
           onChangeCoordinate={this.onChangeCoordinate.bind(this)}
           zoomEnabled={true}
           scrollEnabled={true}
           showsMyLocationButton={true}
         />
         <WrapLocationInformation
-          style={{ display: state.params.displayWrapperInfor }}
-          placeName={state.params.placeName}
+          style={{ display: uiState.isSavingMode ? 'flex' : 'none' }}
+          placeName={uiState.placeName}
           onChangePlaceName={this.onChangePlaceName.bind(this)}
-          placeAddress={state.params.placeAddress}
+          placeAddress={uiState.placeAddress}
           onChangePlaceAddress={this.onChangePlaceAddress.bind(this)} />
         <SaveButton
-          style={{ display: state.params.displaySaveButton }}
-          onButtonPress={() => this.onSaveButtonPress(this.props.dispatch)} />
+          style={{ display: uiState.isSavingMode ? 'none' : 'flex' }}
+          onButtonPress={() => this.onSaveButtonPress()} />
       </View>
     )
   }
 }
 SaveLocation.navigationOptions = ({ navigation }) => {
-  const { state, setParams, goBack } = navigation
-  const rightButton = (!state.params.isSavingMode) ? null :
-    <DoneButton state={state} setParams={setParams} />
+  const { goBack } = navigation
   return {
     title: 'SAVE LOCATION',
-    headerLeft: <BackButton state={state} setParams={setParams} goBack={goBack} />,
-    headerRight: <View style={styles.doneWrap}>{rightButton}</View>
+    headerLeft: <BackButton goBack={goBack} />,
+    headerRight: <DoneButton />
   }
 }
 SaveLocation.propTypes = {
@@ -98,6 +85,7 @@ SaveLocation.propTypes = {
 }
 const mapStateToProps = state => ({
   locations: state.locations.locations,
-  auth: state.auth.auth
+  auth: state.auth.auth,
+  uiState: state.saveScreen
 })
 export default connect(mapStateToProps)(SaveLocation)
