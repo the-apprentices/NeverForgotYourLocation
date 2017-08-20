@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { StyleSheet, View } from 'react-native'
+import CardView from 'react-native-cardview'
 import LocationTextInput from './LocationTextInput'
 const icons = {
   place: require('../assets/imgs/favorite-place.png'),
@@ -8,8 +9,12 @@ const icons = {
 }
 const styles = StyleSheet.create({
   saveContentContainer: {
-    ...StyleSheet.absoluteFillObject,
-    height: 120,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    margin: 8,
+    borderRadius: 2,
     flexDirection: 'column',
     justifyContent: 'center',
     backgroundColor: '#FFFFFF'
@@ -30,7 +35,10 @@ const styles = StyleSheet.create({
 })
 
 export default WrapLocationInformation = ({ style, placeName, onChangePlaceName, placeAddress, onChangePlaceAddress }) => (
-  <View style={[styles.saveContentContainer, style]}>
+  <CardView style={[styles.saveContentContainer, style]}
+    cardElevation={3}
+    cardMaxElevation={0}
+    cornerRadius={2}>
     <LocationTextInput icon={icons.place}
       placeHolder={'Place Name'}
       textValue={placeName}
@@ -43,7 +51,7 @@ export default WrapLocationInformation = ({ style, placeName, onChangePlaceName,
       placeHolder={'Place Address'}
       textValue={placeAddress}
       onChangeText={onChangePlaceAddress} />
-  </View>
+  </CardView>
 )
 WrapLocationInformation.propTypes = {
   style: PropTypes.object,
