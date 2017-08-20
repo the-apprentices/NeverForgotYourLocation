@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { StyleSheet, View, Image, TouchableNativeFeedback, Keyboard } from 'react-native'
 import { getAddress } from '../helpers/getData'
+import { onChangeMode, onChangeCoordinate } from '../actions/saveScreen'
 const icons = {
   back: require('../assets/imgs/back-left.png')
 }
@@ -18,35 +20,31 @@ const styles = StyleSheet.create({
   }
 })
 
-const onButtonPress = async (state, setParams, goBack) => {
-  if (state.params.isSavingMode) {
-    setParams({
-      isSavingMode: false,
-      displayWrapperInfor: 'none',
-      displaySaveButton: 'flex'
-    })
+const onButtonPress = async (auth, uiState, goBack) => {
+  const { dispatch, isSavingMode } = uiState
+  if (isSavingMode) {
+    dispatch(onChangeMode(false, dispatch))
     Keyboard.dismiss()
-    let placeAddress = await getAddress(state.params.targetCoordinate)
-    setParams({
-      placeName: '',
-      placeAddress: placeAddress
-    })
   }
   else goBack()
 }
 
-export default BackButton = ({ state, setParams, goBack }) => (
+const BackButton = ({ auth, uiState, goBack }) => (
   <TouchableNativeFeedback
-    onPress={() => onButtonPress(state, setParams, goBack)}
+    onPress={() => onButtonPress(auth, uiState, goBack)}
     background={TouchableNativeFeedback.Ripple('#adadad', true)}>
     <View style={styles.backButton}>
       <Image style={styles.backIcon} source={icons.back} />
     </View>
   </TouchableNativeFeedback>
 )
-
 BackButton.propTypes = {
-  state: PropTypes.object.isRequired,
-  setParams: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  uiState: PropTypes.object.isRequired,
   goBack: PropTypes.func.isRequired
 }
+const mapStateToProps = state => ({
+  auth: state.auth.auth,
+  uiState: state.saveScreen
+})
+export default connect(mapStateToProps)(BackButton)
