@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { StyleSheet, View, Image, TextInput } from 'react-native'
+import { StyleSheet, View, Image, Text } from 'react-native'
 const styles = StyleSheet.create({
   placeContainer: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    paddingTop: 12,
+    paddingBottom: 8
   },
   placeWrap: {
     flex: 0.15,
@@ -16,10 +18,12 @@ const styles = StyleSheet.create({
   },
   placeText: {
     flex: 0.85,
+    marginLeft: 8,
+    marginRight: 12
+  },
+  placeContent: {
     color: '#000000',
     fontSize: 16,
-    fontWeight: 'normal',
-    paddingLeft: 7,
     fontFamily: 'ProximaNovaSoft-Regular'
   }
 })
@@ -29,14 +33,11 @@ export default LocationTextInput = ({ icon, placeHolder, textValue, onChangeText
     <View style={styles.placeWrap}>
       <Image style={styles.placeIcon} source={icon}></Image>
     </View>
-    <TextInput style={styles.placeText}
-      autoCapitalize='words'
-      placeholder={placeHolder}
-      onChangeText={(textInput) => onChangeText(textInput)}
-      multiline={false}
-      underlineColorAndroid={'transparent'}
-      value={textValue}
-    />
+    <View style={styles.placeText}>
+      <Text style={styles.placeContent}
+        onPress={() => { }}>{textValue}
+      </Text>
+    </View>
   </View>
 )
 LocationTextInput.propTypes = {
