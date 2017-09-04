@@ -20,7 +20,9 @@ const styles = StyleSheet.create({
   }
 })
 
-const onButtonPress = async (auth, uiState, goBack) => {
+const onButtonPress = async (auth, uiState, goBack, justGoBack) => {
+  if (justGoBack)
+    return justGoBack()
   const { dispatch, isSavingMode } = uiState
   if (isSavingMode) {
     dispatch(onChangeMode(false, dispatch))
@@ -29,9 +31,9 @@ const onButtonPress = async (auth, uiState, goBack) => {
   else goBack()
 }
 
-const BackButton = ({ auth, uiState, goBack }) => (
+const BackButton = ({ auth, uiState, goBack, justGoBack }) => (
   <TouchableNativeFeedback
-    onPress={() => onButtonPress(auth, uiState, goBack)}
+    onPress={() => onButtonPress(auth, uiState, goBack, justGoBack)}
     background={TouchableNativeFeedback.Ripple('#adadad', true)}>
     <View style={styles.backButton}>
       <Image style={styles.backIcon} source={icons.back} />
@@ -41,7 +43,8 @@ const BackButton = ({ auth, uiState, goBack }) => (
 BackButton.propTypes = {
   auth: PropTypes.object.isRequired,
   uiState: PropTypes.object.isRequired,
-  goBack: PropTypes.func.isRequired
+  goBack: PropTypes.func,
+  justGoBack: PropTypes.func
 }
 const mapStateToProps = state => ({
   auth: state.auth.auth,
