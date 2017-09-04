@@ -4,7 +4,9 @@ const initialUiState = {
   isSavingMode: false,
   targetCoordinate: null,
   placeName: '',
+  listPlaceName: [],
   placeAddress: '',
+  listPlaceAddress: [],
   dispatch: null
 }
 
@@ -30,8 +32,10 @@ export default (state = initialUiState, action) => {
       return {
         ...state,
         targetCoordinate: action.targetCoordinate,
-        placeName: action.placeName,
-        placeAddress: action.placeAddress
+        placeName: action.listPlaceName[0],
+        listPlaceName: action.listPlaceName,
+        placeAddress: action.listPlaceAddress[0],
+        listPlaceAddress: action.listPlaceAddress
       }
     default:
       return state
