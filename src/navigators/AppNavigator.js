@@ -7,12 +7,14 @@ import HomeScreen from '../screens/HomeScreen'
 import SaveLocation from '../screens/SaveLocation'
 import VisitedLocations from '../screens/VisitedLocations'
 import EditLocation from '../screens/EditLocation'
+import SuggestionScreen from '../screens/SuggestionScreen'
 
 export const AppNavigator = StackNavigator({
   Home: { screen: HomeScreen },
   SaveLocation: { screen: SaveLocation },
   VisitedLocations: { screen: VisitedLocations },
-  EditLocation: { screen: EditLocation }
+  EditLocation: { screen: EditLocation },
+  SuggestionScreen: { screen: SuggestionScreen }
 })
 const AppWithNavigationState = ({ dispatch, nav }) => (
   <AppNavigator navigation={addNavigationHelpers({ dispatch, state: nav })} />
