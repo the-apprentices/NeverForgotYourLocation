@@ -3,17 +3,21 @@ import PropTypes from 'prop-types'
 import { StyleSheet, View, Text, TouchableNativeFeedback } from 'react-native'
 const styles = StyleSheet.create({
   buttonWrapperStyle: {
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    left: 0,
+    right: 0,
     bottom: 10,
     alignItems: 'center',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    borderRadius: 2
   },
   buttonContainerStyle: {
     height: 60,
     width: '90%',
     backgroundColor: '#FD482E',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderRadius: 2
   },
   buttonTextStyle: {
     color: '#F1F5F6',
