@@ -23,40 +23,50 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   borderWhite: {
-    flex: 0.15,
-    height: 1,
+    flex: 0.1,
+    height: StyleSheet.hairlineWidth,
     backgroundColor: '#FFFFFF'
   },
   borderView: {
-    flex: 0.85,
-    height: 1,
+    flex: 0.9,
+    height: StyleSheet.hairlineWidth,
     backgroundColor: '#757575'
   }
 })
 
-export default WrapLocationInformation = ({ style, placeName, onChangePlaceName, placeAddress, onChangePlaceAddress }) => (
-  <CardView style={[styles.saveContentContainer, style]}
-    cardElevation={3}
-    cardMaxElevation={0}
-    cornerRadius={2}>
-    <LocationTextInput icon={icons.place}
-      placeHolder={'Place Name'}
-      textValue={placeName}
-      onChangeText={onChangePlaceName} />
-    <View style={styles.borderContainer}>
-      <View style={styles.borderWhite}></View>
-      <View style={styles.borderView}></View>
-    </View>
-    <LocationTextInput icon={icons.flag}
-      placeHolder={'Place Address'}
-      textValue={placeAddress}
-      onChangeText={onChangePlaceAddress} />
-  </CardView>
-)
+export default WrapLocationInformation = ({
+   style, placeName, listPlaceName, onChangePlaceName,
+  placeAddress, onChangePlaceAddress, listPlaceAddress, navigation
+   }) => (
+    <CardView style={[styles.saveContentContainer, style]}
+      cardElevation={4}
+      cardMaxElevation={0}
+      cornerRadius={2}>
+      <LocationTextInput icon={icons.place}
+        placeHolder={'Place Name'}
+        textValue={placeName}
+        suggestionList={listPlaceName}
+        onChangeText={onChangePlaceName}
+        navigation={navigation} />
+      <View style={styles.borderContainer}>
+        <View style={styles.borderWhite}></View>
+        <View style={styles.borderView}></View>
+      </View>
+      <LocationTextInput icon={icons.flag}
+        placeHolder={'Place Address'}
+        textValue={placeAddress}
+        suggestionList={listPlaceAddress}
+        onChangeText={onChangePlaceAddress}
+        navigation={navigation} />
+    </CardView>
+  )
 WrapLocationInformation.propTypes = {
   style: PropTypes.object,
   placeName: PropTypes.string.isRequired,
+  listPlaceName: PropTypes.array.isRequired,
   onChangePlaceName: PropTypes.func.isRequired,
   placeAddress: PropTypes.string.isRequired,
-  onChangePlaceAddress: PropTypes.func.isRequired
+  onChangePlaceAddress: PropTypes.func.isRequired,
+  listPlaceAddress: PropTypes.array.isRequired,
+  navigation: PropTypes.object.isRequired
 }
