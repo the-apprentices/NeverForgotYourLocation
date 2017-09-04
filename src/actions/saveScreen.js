@@ -5,11 +5,11 @@ export const onChangeMode = (isSavingMode, dispatch) => ({
   isSavingMode,
   dispatch
 })
-export const onChangeCoordinate = (targetCoordinate, placeName, placeAddress) => ({
+export const onChangeCoordinate = (targetCoordinate, listPlaceName, listPlaceAddress) => ({
   type: CHANGE_COORDINATE,
   targetCoordinate,
-  placeName,
-  placeAddress
+  listPlaceName,
+  listPlaceAddress
 })
 export const onChangePlaceName = (placeName) => ({
   type: CHANGE_NAME,
