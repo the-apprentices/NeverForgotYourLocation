@@ -17,17 +17,7 @@ function nav(state = initialNavState, action) {
       break
     case 'SaveLocation':
       nextState = AppNavigator.router.getStateForAction(
-        NavigationActions.navigate({
-          routeName: 'SaveLocation',
-          params: {
-            isSavingMode: false,
-            displayWrapperInfor: 'none',
-            displaySaveButton: 'flex',
-            targetCoordinate: null,
-            placeName: '',
-            placeAddress: ''
-          }
-        }),
+        NavigationActions.navigate({ routeName: 'SaveLocation' }),
         state
       )
       break
@@ -54,6 +44,17 @@ function nav(state = initialNavState, action) {
       console.warn('ji')
       nextState = AppNavigator.router.getStateForAction(
         NavigationActions.back({ routeName: 'VisitedLocations', params: { edited: true } }),
+        state
+      )
+      break
+    case 'SuggestionScreen':
+      nextState = AppNavigator.router.getStateForAction(
+        NavigationActions.navigate({
+          routeName: 'SuggestionScreen',
+          params: {
+            ...action.params
+          }
+        }),
         state
       )
       break
