@@ -13,22 +13,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   doneButtonWrapper: {
-    borderRadius: 5
+    borderRadius: 2
   },
   doneButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 5,
+    borderRadius: 2,
   },
   doneButtonText: {
     fontSize: 16,
     color: '#000000',
     fontWeight: 'normal',
     fontFamily: 'ProximaNovaSoft-Regular',
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 7,
-    paddingRight: 7
+    padding: 5
   }
 })
 const onButtonPress = async (auth, uiState) => {
