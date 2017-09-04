@@ -7,7 +7,7 @@ import MapView from '../components/MapView'
 import SaveButton from '../components/SaveButton'
 import WrapLocationInformation from '../components/WrapLocationInformation'
 import { onChangeMode, onChangeCoordinate, onChangePlaceName, onChangePlaceAddress } from '../actions/saveScreen'
-import { getAddress } from '../helpers/getData'
+import { getAddress, getPlaceName } from '../helpers/getData'
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
@@ -29,8 +29,9 @@ class SaveLocation extends Component {
     this.dispatch(onChangePlaceAddress(placeAddress))
   }
   onChangeCoordinate = async (targetCoordinate) => {
-    let placeAddress = await getAddress(targetCoordinate)
-    this.dispatch(onChangeCoordinate(targetCoordinate, '', placeAddress))
+    let listPlaceAddress = await getAddress(targetCoordinate)
+    let listPlaceName = await getPlaceName(targetCoordinate)
+    this.dispatch(onChangeCoordinate(targetCoordinate, listPlaceName, listPlaceAddress))
   }
   onSaveButtonPress = () => {
     this.dispatch(onChangeMode(true, this.dispatch))
@@ -52,9 +53,12 @@ class SaveLocation extends Component {
         <WrapLocationInformation
           style={{ display: uiState.isSavingMode ? 'flex' : 'none' }}
           placeName={uiState.placeName}
+          listPlaceName={uiState.listPlaceName}
           onChangePlaceName={this.onChangePlaceName.bind(this)}
           placeAddress={uiState.placeAddress}
-          onChangePlaceAddress={this.onChangePlaceAddress.bind(this)} />
+          listPlaceAddress={uiState.listPlaceAddress}
+          onChangePlaceAddress={this.onChangePlaceAddress.bind(this)}
+          navigation={this.props.navigation} />
         <SaveButton
           style={{ display: uiState.isSavingMode ? 'none' : 'flex' }}
           onButtonPress={() => this.onSaveButtonPress()} />
